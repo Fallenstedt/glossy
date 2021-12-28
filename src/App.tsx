@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+// import "highlight.js/styles/github.css";
+// import highlight from "highlight.js";
+import { useEffect, useRef } from "react";
+import CodeMirror from "codemirror";
+
+// https://codemirror.net/doc/manual.html
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const container = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (container.current) {
+			const myMirror = CodeMirror(container.current);
+		}
+	}, []);
+	return (
+		<div className="app">
+			<header></header>
+			<div ref={container} className="code-container"></div>
+		</div>
+	);
 }
 
 export default App;
