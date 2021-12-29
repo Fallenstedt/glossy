@@ -1,0 +1,17 @@
+.code-comments {
+	list-style: none;
+}
+.code-comment {
+	/* display: list-item; */
+	margin-top: 20px;
+}
+
+.code-comment::before {
+	content: attr(data-num);
+	font-size: 1.1em; /* Adjust this value so that it appears what size you want. */
+}
+.code-textarea {
+	width: 500px;
+	height: 80px;
+	margin-top: auto;
+}
