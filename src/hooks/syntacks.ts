@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useEffect } from "react";
+import { SYNTACKS_TABS } from "../util/constants";
 
 class Nums {
 	public static nums = [
@@ -33,7 +34,7 @@ export class Comment {
 }
 
 class Comments {
-	constructor(private readonly callbacks: SyntacksCallback[]) {}
+	constructor(private readonly callbacks: CommentCallback[]) {}
 
 	private readonly comments: Comment[] = [];
 
@@ -75,19 +76,51 @@ class Comments {
 	}
 }
 
-type SyntacksCallback = (comments: Comment[]) => void;
-class Syntacks {
-	public readonly callbacks: SyntacksCallback[] = [];
-	public readonly comments = new Comments(this.callbacks);
+class Tabs {
+	private _tab = SYNTACKS_TABS.PASTE_YOUR_CODE;
 
-	public onCommentsUpdate(callback: (comments: Comment[]) => void) {
-		this.callbacks.push(callback);
+	constructor(private tabcallbacks: TabCallback[]) {}
+
+	public set tab(t: SYNTACKS_TABS) {
+		this._tab = t;
+		this.tabcallbacks.forEach((cb) => cb(t));
+	}
+
+	public get tab() {
+		return this._tab;
+	}
+}
+
+type CommentCallback = (comments: Comment[]) => void;
+type TabCallback = (tab: SYNTACKS_TABS) => void;
+
+class Syntacks {
+	private readonly commentCallbacks: CommentCallback[] = [];
+	private readonly tabCallbacks: TabCallback[] = [];
+
+	public readonly comments = new Comments(this.commentCallbacks);
+	public readonly tabs = new Tabs(this.tabCallbacks);
+
+	public onCommentsUpdate(callback: CommentCallback) {
+		this.commentCallbacks.push(callback);
 		callback(this.comments.allComments());
 
 		return () => {
-			const i = this.callbacks.indexOf(callback);
+			const i = this.commentCallbacks.indexOf(callback);
 			if (i > -1) {
-				this.callbacks.splice(i, 1);
+				this.commentCallbacks.splice(i, 1);
+			}
+		};
+	}
+
+	public onTabUpdate(callback: TabCallback) {
+		this.tabCallbacks.push(callback);
+		callback(this.tabs.tab);
+
+		return () => {
+			const i = this.tabCallbacks.indexOf(callback);
+			if (i > -1) {
+				this.tabCallbacks.splice(i, 1);
 			}
 		};
 	}
@@ -118,7 +151,7 @@ export function useSyntacks() {
 	const context = useContext(SyntacksContext);
 
 	if (!context) {
-		throw new Error("Failed to create Dashboard Context. Was it initalized?");
+		throw new Error("Failed to create Syntacks Context. Was it initalized?");
 	}
 	return context;
 }

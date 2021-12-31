@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { Label } from "./Font";
+import { classNames } from "../../util/classnames";
 
 export interface DropDownProps {
 	title: string;
@@ -10,19 +12,15 @@ export interface DropDownProps {
 	className?: string;
 }
 
-function classNames(...classes: any[]) {
-	return classes.filter(Boolean).join(" ");
-}
-
 export function DropDown(props: DropDownProps) {
 	return (
 		<div className={props.className}>
-			<label
-				htmlFor="price"
+			<Label
+				htmlFor={props.title}
 				className="block text-sm font-medium text-gray-700"
 			>
 				{props.title}
-			</label>
+			</Label>
 
 			<Menu as="div" className="relative inline-block text-left z-10">
 				<div>

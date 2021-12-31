@@ -15,3 +15,30 @@ export function LargeText(props: { children: React.ReactNode }) {
 		</p>
 	);
 }
+
+export function SmallText(props: { children: React.ReactNode }) {
+	return (
+		<p className="font-inter-light text-md leading-7 text-gray-900 sm:text-md sm:truncate">
+			{props.children}
+		</p>
+	);
+}
+
+export function Label({
+	children,
+	htmlFor,
+	...rest
+}: {
+	children: React.ReactNode;
+	htmlFor: string;
+} & React.HTMLAttributes<HTMLLabelElement>) {
+	return (
+		<label
+			htmlFor={htmlFor}
+			className="font-inter-med block text-sm font-medium text-gray-700"
+			{...rest}
+		>
+			{children}
+		</label>
+	);
+}

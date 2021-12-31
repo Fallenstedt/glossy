@@ -1,3 +1,10 @@
+export enum SYNTACKS_TABS {
+	PASTE_YOUR_CODE = "Paste Your Code",
+	ANNOTATE = "Annotate",
+	EXPORT = "Export",
+	UNKNOWN = "Unknown",
+}
+
 export const CODE_MIRROR_DEFAULTS = {
 	THEME: "dracula",
 	MODE: "javascript",

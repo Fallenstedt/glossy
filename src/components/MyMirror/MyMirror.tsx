@@ -121,22 +121,18 @@ import "codemirror/mode/yacas/yacas.js";
 import "codemirror/mode/yaml-frontmatter/yaml-frontmatter.js";
 import "codemirror/mode/yaml/yaml.js";
 import "codemirror/mode/z80/z80.js";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { MirrorProvider } from "../../hooks/mirror";
 import { useSyntacks } from "../../hooks/syntacks";
-import {
-	CODE_MIRROR_DEFAULTS,
-	CODE_MIRROR_MODES,
-	CODE_MIRROR_THEMES,
-} from "../../util/constants";
+import { CODE_MIRROR_DEFAULTS, SYNTACKS_TABS } from "../../util/constants";
 import { OrderedListOfComments } from "../Comments/Comments";
-import { ModeSelect } from "../ModeSelect/ModeSelect";
-import { ThemeSelect } from "../ThemeSelect/ThemeSelect";
+import { Tabs } from "../Tabs/Tabs";
 import "./my-mirror.css";
 
-// https://stackoverflow.com/questions/21643872/how-to-change-the-mode-of-the-codemirror-editor-based-on-selected-value-in-selec
-
-function useLoadMyMirror(container: React.RefObject<HTMLDivElement>) {
-	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | null>(null);
+function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
+	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
+		undefined
+	);
 	useEffect(() => {
 		if (container.current && !myMirror) {
 			const m = CodeMirror(container.current, {
@@ -152,7 +148,23 @@ function useLoadMyMirror(container: React.RefObject<HTMLDivElement>) {
 	return myMirror;
 }
 
-function useAddComment(mymirror: CodeMirror.Editor | null) {
+function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
+	const syntacks = useSyntacks();
+	useEffect(() => {
+		const toggleReadOnly = (currenttab: SYNTACKS_TABS) => {
+			if (currenttab === SYNTACKS_TABS.PASTE_YOUR_CODE) {
+				mymirror?.setOption("readOnly", false);
+			} else {
+				mymirror?.setOption("readOnly", true);
+			}
+		};
+		const unsubscribe = syntacks.onTabUpdate(toggleReadOnly);
+
+		return () => unsubscribe();
+	}, [mymirror, syntacks]);
+}
+
+function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 	const syntacks = useSyntacks();
 
 	useEffect(() => {
@@ -203,69 +215,25 @@ function useAddComment(mymirror: CodeMirror.Editor | null) {
 	}, [mymirror, syntacks]);
 }
 
-export function useMirrorTheme(
-	mymirror: CodeMirror.Editor | null
-): [string, (t: string) => void] {
-	const [theme, setTheme] = useState<string>(CODE_MIRROR_DEFAULTS.THEME);
-
-	const onThemeSelect = useCallback(
-		(newtheme: string) => {
-			if (!mymirror) {
-				return;
-			}
-			mymirror.setOption("theme", newtheme);
-			setTheme(newtheme);
-		},
-		[mymirror]
-	);
-
-	return [theme, onThemeSelect];
-}
-
-export function useMirrorMode(
-	mymirror: CodeMirror.Editor | null
-): [string, (t: string) => void] {
-	const [dd, setMode] = useState<string>(CODE_MIRROR_DEFAULTS.MODE);
-
-	const onModeSelect = useCallback(
-		(newmode: string) => {
-			if (!mymirror) {
-				return;
-			}
-
-			mymirror.setOption("mode", newmode);
-
-			setMode(newmode);
-		},
-		[mymirror]
-	);
-
-	return [dd, onModeSelect];
-}
-
 export function MyMirror() {
+	const syntacks = useSyntacks();
 	const container = useRef<HTMLDivElement>(null);
-	const mymirror = useLoadMyMirror(container);
+
+	const mymirror = useInitializeMyMirror(container);
 	useAddComment(mymirror);
-	const [theme, onThemeChange] = useMirrorTheme(mymirror);
-	const [mode, onModeChange] = useMirrorMode(mymirror);
+	useSetReadOnly(mymirror);
 
 	return (
-		<>
-			<div className="flex flex-row gap-x-5 my-4">
-				<ThemeSelect
-					themes={CODE_MIRROR_THEMES}
-					currentTheme={theme}
-					onThemeChange={onThemeChange}
+		<MirrorProvider value={mymirror}>
+			<div className="shadow rounded-md bg-white p-10 mt-10">
+				<Tabs
+					onChange={(tab: SYNTACKS_TABS) => {
+						syntacks.tabs.tab = tab;
+					}}
 				/>
-				<ModeSelect
-					modes={CODE_MIRROR_MODES}
-					currentMode={mode}
-					onModeChange={onModeChange}
-				/>
+				<div ref={container} className="code-container" />
+				<OrderedListOfComments />
 			</div>
-			<div ref={container} className="code-container" />
-			<OrderedListOfComments />
-		</>
+		</MirrorProvider>
 	);
 }

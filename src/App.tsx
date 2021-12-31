@@ -13,7 +13,6 @@ function App() {
 				<header className="text-center">
 					<H1>Syntacks 📌</H1>
 					<LargeText>Document and prettify your source code.</LargeText>
-					<LargeText>Paste your code in the textarea to get started.</LargeText>
 				</header>
 				<MyMirror />
 			</Container>
