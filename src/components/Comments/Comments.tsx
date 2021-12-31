@@ -1,6 +1,6 @@
 import "./comments.css";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSyntacks, Comment } from "../../providers/syntacks";
+import { useSyntacks, Comment } from "../../hooks/syntacks";
 
 function useCurrentComments() {
 	const syntacks = useSyntacks();
@@ -41,7 +41,6 @@ export function ListItem(props: ListItemProps) {
 
 	return (
 		<li className="code-comment" data-num={props.comment.label}>
-			<br></br>
 			<textarea
 				onChange={(e) => updateComment(e.currentTarget.value)}
 				className="code-textarea"

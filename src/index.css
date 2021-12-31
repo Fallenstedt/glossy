@@ -1,46 +1,25 @@
-:root {
-	--baby-powder: #fbfbf2;
+@font-face {
+	font-family: "InterMed";
+	src: URL("./font/Inter/static/Inter-Medium.ttf") format("truetype");
 }
 
-h1,
-textarea,
-select,
-option,
-p {
-	font-family: Arial, Helvetica, Geneva, Tahoma, sans-serif;
+@font-face {
+	font-family: "InterLight";
+	src: URL("./font/Inter/static/Inter-Light.ttf") format("truetype");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--baby-powder: #f9fafb;
 }
 
 html,
 body {
 	background-color: var(--baby-powder);
 }
-
-.title {
-	font-size: 3em;
-}
-
-.large-font {
-	font-size: 1.5em;
-}
-
-header {
-	text-align: center;
-}
-
-/* .app {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	border: 2px solid green;
-	
-	align-items: center;
-} */
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 

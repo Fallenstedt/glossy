@@ -1,12 +1,18 @@
-import "./mode-select.css";
+import { DropDown } from "../common/DropDown";
 
-export function ModeSelect() {
+export interface ModeSelectProps {
+	currentMode: string;
+	modes: string[];
+	onModeChange: (t: string) => void;
+}
+
+export function ModeSelect(props: ModeSelectProps) {
 	return (
-		<div className="mode-select">
-			<select onChange={(e) => console.log(e.currentTarget.value)}>
-				<option value="javascript">javascript</option>
-				<option value="html">html</option>
-			</select>
-		</div>
+		<DropDown
+			onChange={props.onModeChange}
+			options={props.modes}
+			current={props.currentMode}
+			title={"Language"}
+		/>
 	);
 }
