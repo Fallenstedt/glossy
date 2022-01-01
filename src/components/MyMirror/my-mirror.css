@@ -3,7 +3,9 @@
 	border-radius: 5px;
 	padding: 8px;
 	height: auto;
+	position: relative;
 }
+
 @import "~codemirror/theme/zenburn.css";
 @import "~codemirror/theme/3024-day.css";
 @import "~codemirror/theme/3024-night.css";

@@ -1,29 +1,9 @@
 export enum SYNTACKS_TABS {
-	PASTE_YOUR_CODE = "Paste Your Code",
-	ANNOTATE = "Annotate",
-	EXPORT = "Export",
+	PASTE_YOUR_CODE = "1. Paste Your Code",
+	ANNOTATE = "2. Annotate",
+	EXPORT = "3. Export",
 	UNKNOWN = "Unknown",
 }
-
-export const CODE_MIRROR_DEFAULTS = {
-	THEME: "dracula",
-	MODE: "javascript",
-	VALUE: `
-const array = [15, 16, 17, 18, 19];
-
-function reducer(previous, current, index, array) {
-	const returns = previous + current;
-	console.log(
-				\`previous: \${previous},  
-					current: \${current}, index: \${index}, 
-					returns: \${returns}\`
-				);
-	return returns;
-}
-
-array.reduce(reducer);
-	`,
-};
 
 export const CODE_MIRROR_MODES = [
 	"apl",
@@ -216,3 +196,26 @@ export const CODE_MIRROR_THEMES = [
 	"yonce",
 	"zenburn",
 ];
+
+export const CODE_MIRROR_DEFAULTS = {
+	THEME:
+		CODE_MIRROR_THEMES[
+			Math.round(Math.random() * CODE_MIRROR_THEMES.length - 1)
+		] ?? "dracula",
+	MODE: "javascript",
+	VALUE: `
+const array = [15, 16, 17, 18, 19];
+
+function reducer(previous, current, index, array) {
+	const returns = previous + current;
+	console.log(
+				\`previous: \${previous},  
+					current: \${current}, index: \${index}, 
+					returns: \${returns}\`
+				);
+	return returns;
+}
+
+array.reduce(reducer);
+	`,
+};
