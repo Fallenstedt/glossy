@@ -204,17 +204,34 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 					return;
 				}
 
-				doc.replaceRange(
-					`${line} ${comment.label}`,
-					{
-						ch: 0,
-						line: cursor.line,
-					},
-					{
-						ch: line.length,
-						line: cursor.line,
-					}
-				);
+				// BEGIN
+				//
+				// const el = <i className="conum" data-value="1"></i>;
+				const el = document.createElement("i");
+				el.className = "conum";
+				el.setAttribute("data-value", "1");
+				// mymirror.addLineWidget(cursor.line, el, {});
+
+				var msg = document.createElement("div");
+				msg.appendChild(el);
+				const w = mymirror.addLineWidget(cursor.line, msg, {
+					coverGutter: false,
+					noHScroll: true,
+				});
+				//
+				//END
+
+				// doc.replaceRange(
+				// 	`${line} ${comment.label}`,
+				// 	{
+				// 		ch: 0,
+				// 		line: cursor.line,
+				// 	},
+				// 	{
+				// 		ch: line.length,
+				// 		line: cursor.line,
+				// 	}
+				// );
 
 				mymirror.markText(
 					{

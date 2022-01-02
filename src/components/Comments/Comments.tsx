@@ -1,3 +1,4 @@
+import "./comments.css";
 import { useCallback, useEffect, useState } from "react";
 import { useSyntacks, Comment } from "../../hooks/syntacks";
 
@@ -45,7 +46,7 @@ export function CommentBox(props: CommentBoxProps) {
 				htmlFor="about"
 				className="block text-sm font-medium text-gray-700"
 			>
-				Comment {props.comment.label}
+				Comment {props.comment.label} <i className="conum" data-value="1"></i>
 			</label>
 			<div className="mt-1">
 				<textarea
