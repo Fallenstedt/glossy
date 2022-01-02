@@ -53,20 +53,14 @@ export function CommentBox(props: CommentBoxProps) {
 					name={props.comment.id}
 					rows={3}
 					onChange={(e) => updateComment(e.currentTarget.value)}
-					className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+					value={props.comment.content}
+					className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-inter-light p-2"
 					placeholder={""}
-					defaultValue={""}
 				/>
 			</div>
 			<p className="mt-2 text-sm text-gray-500">
-				Brief description for your profile. URLs are hyperlinked.
+				Brief description of this code.
 			</p>
 		</div>
-
-		// <li className="code-comment" data-num={props.comment.label}>
-		// 	<textarea
-		// 		className="code-textarea"
-		// 	></textarea>
-		// </li>
 	);
 }

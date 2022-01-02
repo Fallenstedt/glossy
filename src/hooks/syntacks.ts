@@ -14,10 +14,15 @@ class Nums {
 
 export class Comment {
 	public readonly id: string = new Date().toISOString();
-	constructor(private _content: string = "", private _label: string = "") {}
+	constructor(
+		private readonly callbacks: () => void,
+		private _content: string = "",
+		private _label: string = ""
+	) {}
 
 	public set content(c: string) {
 		this._content = c;
+		this.callbacks();
 	}
 
 	public get content() {
@@ -26,6 +31,7 @@ export class Comment {
 
 	public set label(c: string) {
 		this._label = c;
+		this.callbacks();
 	}
 
 	public get label() {
@@ -42,24 +48,20 @@ class Comments {
 		return this.comments.slice();
 	}
 
-	public commentNo() {
-		return this.comments.length - 1;
+	public remainingComments() {
+		return Nums.nums.length - this.comments.length;
 	}
 
-	public getChar() {
-		return Nums.getChar(this.commentNo());
-	}
-
-	public addComment(): boolean {
-		if (this.commentNo() === Nums.nums.length - 1) {
-			return false;
+	public addComment(): Comment | null {
+		if (this.commentIndex() === Nums.nums.length - 1) {
+			return null;
 		}
-		const c = new Comment();
+		const c = new Comment(this.invokeCallbacks);
 		this.comments.push(c);
 		c.label = this.getChar();
 
 		this.invokeCallbacks();
-		return true;
+		return c;
 	}
 
 	public removeComment(comment: Comment) {
@@ -71,8 +73,16 @@ class Comments {
 		this.invokeCallbacks();
 	}
 
-	private invokeCallbacks() {
+	private invokeCallbacks = () => {
 		this.callbacks.forEach((cb) => cb(this.allComments()));
+	};
+
+	private commentIndex() {
+		return this.comments.length - 1;
+	}
+
+	private getChar() {
+		return Nums.getChar(this.commentIndex());
 	}
 }
 

@@ -203,8 +203,7 @@ export const CODE_MIRROR_DEFAULTS = {
 			Math.round(Math.random() * CODE_MIRROR_THEMES.length - 1)
 		] ?? "dracula",
 	MODE: "javascript",
-	VALUE: `
-const array = [15, 16, 17, 18, 19];
+	VALUE: `const array = [15, 16, 17, 18, 19];
 
 function reducer(previous, current, index, array) {
 	const returns = previous + current;
