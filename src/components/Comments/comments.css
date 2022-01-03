@@ -12,6 +12,11 @@
 	font-style: normal;
 	font-weight: bold;
 }
+
+.inverted {
+	filter: invert();
+}
+
 .conum[data-value]:after {
 	content: attr(data-value);
 }

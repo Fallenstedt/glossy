@@ -24,6 +24,14 @@ export function SmallText(props: { children: React.ReactNode }) {
 	);
 }
 
+export function HelpText(props: { children: React.ReactNode }) {
+	return (
+		<p className="font-inter-light mt-2 text-sm text-gray-500">
+			{props.children}
+		</p>
+	);
+}
+
 export function Label({
 	children,
 	htmlFor,

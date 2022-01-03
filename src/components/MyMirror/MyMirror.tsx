@@ -123,8 +123,8 @@ import "codemirror/mode/yaml/yaml.js";
 import "codemirror/mode/z80/z80.js";
 import React, { useEffect, useRef, useState } from "react";
 import { MirrorProvider } from "../../hooks/mirror";
-import { useSyntacks } from "../../hooks/syntacks";
-import { CODE_MIRROR_DEFAULTS, SYNTACKS_TABS } from "../../util/constants";
+import { useCallouts } from "../../hooks/callouts/callouts";
+import { CODE_MIRROR_DEFAULTS, CALLOUT_TABS } from "../../util/constants";
 import { OrderedListOfComments } from "../Comments/Comments";
 import { Tabs } from "../Tabs/Tabs";
 import "./my-mirror.css";
@@ -140,6 +140,7 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 				mode: CODE_MIRROR_DEFAULTS.MODE,
 				theme: CODE_MIRROR_DEFAULTS.THEME,
 				viewportMargin: Infinity,
+				lineNumbers: true,
 			});
 
 			setMyMirror(m);
@@ -149,10 +150,10 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 }
 
 function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
-	const syntacks = useSyntacks();
+	const callouts = useCallouts();
 	useEffect(() => {
-		const toggleReadOnly = (currenttab: SYNTACKS_TABS) => {
-			if (currenttab === SYNTACKS_TABS.PASTE_YOUR_CODE) {
+		const toggleReadOnly = (currenttab: CALLOUT_TABS) => {
+			if (currenttab === CALLOUT_TABS.PASTE_YOUR_CODE) {
 				mymirror?.setOption("readOnly", false);
 				mymirror?.setOption("cursorBlinkRate", 530);
 			} else {
@@ -160,14 +161,14 @@ function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
 				mymirror?.setOption("cursorBlinkRate", -1);
 			}
 		};
-		const unsubscribe = syntacks.onTabUpdate(toggleReadOnly);
+		const unsubscribe = callouts.onTabUpdate(toggleReadOnly);
 
 		return () => unsubscribe();
-	}, [mymirror, syntacks]);
+	}, [mymirror, callouts]);
 }
 
 function useAddComment(mymirror: CodeMirror.Editor | undefined) {
-	const syntacks = useSyntacks();
+	const callouts = useCallouts();
 
 	useEffect(() => {
 		if (!mymirror) {
@@ -189,7 +190,7 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 		});
 
 		mymirror.on("cursorActivity", (e: CodeMirror.Editor) => {
-			if (syntacks.tabs.tab !== SYNTACKS_TABS.ANNOTATE) {
+			if (callouts.tabs.tab !== CALLOUT_TABS.ANNOTATE) {
 				return;
 			}
 			if (movedByMouse) {
@@ -199,58 +200,23 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 				if (!line.length) {
 					return;
 				}
-				const comment = syntacks.comments.addComment();
+
+				const comment = callouts.comments.addComment();
 				if (!comment) {
 					return;
 				}
 
-				// BEGIN
-				//
-				// const el = <i className="conum" data-value="1"></i>;
-				const el = document.createElement("i");
-				el.className = "conum";
-				el.setAttribute("data-value", "1");
-				// mymirror.addLineWidget(cursor.line, el, {});
-
-				var msg = document.createElement("div");
-				msg.appendChild(el);
-				const w = mymirror.addLineWidget(cursor.line, msg, {
-					coverGutter: false,
-					noHScroll: true,
+				const widget = doc.addLineWidget(cursor.line, comment.callout, {
+					above: true,
 				});
-				//
-				//END
-
-				// doc.replaceRange(
-				// 	`${line} ${comment.label}`,
-				// 	{
-				// 		ch: 0,
-				// 		line: cursor.line,
-				// 	},
-				// 	{
-				// 		ch: line.length,
-				// 		line: cursor.line,
-				// 	}
-				// );
-
-				mymirror.markText(
-					{
-						ch: 0,
-						line: cursor.line,
-					},
-					{
-						ch: line.length,
-						line: cursor.line,
-					},
-					{ className: "annotated-text" }
-				);
+				comment.widget = widget;
 			}
 		});
-	}, [mymirror, syntacks]);
+	}, [mymirror, callouts]);
 }
 
 export function MyMirror() {
-	const syntacks = useSyntacks();
+	const callouts = useCallouts();
 	const container = useRef<HTMLDivElement>(null);
 
 	const mymirror = useInitializeMyMirror(container);
@@ -261,8 +227,8 @@ export function MyMirror() {
 		<MirrorProvider value={mymirror}>
 			<div className="shadow rounded-md bg-white p-10 mt-10">
 				<Tabs
-					onChange={(tab: SYNTACKS_TABS) => {
-						syntacks.tabs.tab = tab;
+					onChange={(tab: CALLOUT_TABS) => {
+						callouts.tabs.tab = tab;
 					}}
 				/>
 				<div ref={container} className="drop-shadow-xl">

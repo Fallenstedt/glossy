@@ -1,4 +1,4 @@
-export enum SYNTACKS_TABS {
+export enum CALLOUT_TABS {
 	PASTE_YOUR_CODE = "1. Paste Your Code",
 	ANNOTATE = "2. Annotate",
 	EXPORT = "3. Export",
@@ -198,10 +198,11 @@ export const CODE_MIRROR_THEMES = [
 ];
 
 export const CODE_MIRROR_DEFAULTS = {
-	THEME:
-		CODE_MIRROR_THEMES[
-			Math.round(Math.random() * CODE_MIRROR_THEMES.length - 1)
-		] ?? "dracula",
+	THEME: "base16-light",
+	// THEME:
+	// 	CODE_MIRROR_THEMES[
+	// 		Math.round(Math.random() * CODE_MIRROR_THEMES.length - 1)
+	// 	] ?? "dracula",
 	MODE: "javascript",
 	VALUE: `const array = [15, 16, 17, 18, 19];
 

@@ -1,11 +1,11 @@
 import { Tab } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { useMirror, useMirrorMode, useMirrorTheme } from "../../hooks/mirror";
-import { useSyntacks } from "../../hooks/syntacks";
+import { useCallouts } from "../../hooks/callouts/callouts";
 import {
 	CODE_MIRROR_MODES,
 	CODE_MIRROR_THEMES,
-	SYNTACKS_TABS,
+	CALLOUT_TABS,
 } from "../../util/constants";
 import { SmallText } from "../common/Font";
 import { ModeSelect } from "../ModeSelect/ModeSelect";
@@ -38,11 +38,11 @@ function RenderPrepare() {
 }
 
 function RenderAnnotate() {
-	const syntacks = useSyntacks();
+	const callouts = useCallouts();
 	const [remainingComments, setRemainingComments] = useState("");
 	useEffect(() => {
-		const unsubscribe = syntacks.onCommentsUpdate(() => {
-			const remainingComments = syntacks.comments.remainingComments();
+		const unsubscribe = callouts.onCommentsUpdate(() => {
+			const remainingComments = callouts.comments.remainingComments();
 			let message: string;
 			switch (remainingComments) {
 				case 0:
@@ -60,12 +60,12 @@ function RenderAnnotate() {
 		});
 
 		return () => unsubscribe();
-	}, [syntacks]);
+	}, [callouts]);
 
 	return (
 		<>
 			<SmallText>
-				Add anotations by clicking the lines of code that need explanation.
+				Add callouts by clicking the lines of code that need explanation.
 			</SmallText>
 			<SmallText>{remainingComments}</SmallText>
 		</>
@@ -74,16 +74,14 @@ function RenderAnnotate() {
 
 export function Tabs(props: TabsProps) {
 	const [steps] = useState([
-		SYNTACKS_TABS.PASTE_YOUR_CODE,
-		SYNTACKS_TABS.ANNOTATE,
-		SYNTACKS_TABS.EXPORT,
+		CALLOUT_TABS.PASTE_YOUR_CODE,
+		CALLOUT_TABS.ANNOTATE,
+		CALLOUT_TABS.EXPORT,
 	]);
 
 	return (
 		<Tab.Group
-			onChange={(i: number) =>
-				props.onChange(steps[i] ?? SYNTACKS_TABS.UNKNOWN)
-			}
+			onChange={(i: number) => props.onChange(steps[i] ?? CALLOUT_TABS.UNKNOWN)}
 		>
 			<Tab.List className="flex p-1 space-x-1 bg-zinc-300/20 rounded-xl mb-2">
 				<TabItem>{steps[0]}</TabItem>

@@ -1,22 +1,24 @@
 import "./comments.css";
 import { useCallback, useEffect, useState } from "react";
-import { useSyntacks, Comment } from "../../hooks/syntacks";
+import { useCallouts } from "../../hooks/callouts/callouts";
+import { Comment } from "../../hooks/callouts/comment";
+import { HelpText, SmallText } from "../common/Font";
 
-function useCurrentComments() {
-	const syntacks = useSyntacks();
+function useCurrentCallouts() {
+	const callouts = useCallouts();
 	const [currentComments, setCurrentComments] = useState<Comment[]>(
-		syntacks.comments.allComments()
+		callouts.comments.allComments()
 	);
 	useEffect(() => {
-		const unsubscribe = syntacks.onCommentsUpdate((c) => setCurrentComments(c));
+		const unsubscribe = callouts.onCommentsUpdate((c) => setCurrentComments(c));
 		return () => unsubscribe();
-	}, [syntacks]);
+	}, [callouts]);
 
 	return currentComments;
 }
 
 export function OrderedListOfComments() {
-	const currentComments = useCurrentComments();
+	const currentComments = useCurrentCallouts();
 
 	const comments = currentComments.map((comment) => (
 		<CommentBox key={comment.id} comment={comment}>
@@ -33,6 +35,7 @@ interface CommentBoxProps {
 }
 
 export function CommentBox(props: CommentBoxProps) {
+	const callouts = useCallouts();
 	const updateComment = useCallback(
 		(content: string) => {
 			props.comment.content = content;
@@ -42,12 +45,24 @@ export function CommentBox(props: CommentBoxProps) {
 
 	return (
 		<div className="mt-5">
-			<label
-				htmlFor="about"
-				className="block text-sm font-medium text-gray-700"
-			>
-				Comment {props.comment.label} <i className="conum" data-value="1"></i>
-			</label>
+			<div className="flex flex-row justify-between">
+				<label
+					htmlFor="about"
+					className="font-inter-med block text-sm font-medium text-gray-700"
+				>
+					Comment{" "}
+					<i className="conum" data-value={props.comment.getDataValue()}></i>
+				</label>
+				<button
+					className="font-inter-light text-sm text-blue-700"
+					onClick={(e) => {
+						e.preventDefault();
+						callouts.comments.removeComment(props.comment);
+					}}
+				>
+					&#10005; Remove
+				</button>
+			</div>
 			<div className="mt-1">
 				<textarea
 					id={props.comment.id}
@@ -59,9 +74,7 @@ export function CommentBox(props: CommentBoxProps) {
 					placeholder={""}
 				/>
 			</div>
-			<p className="mt-2 text-sm text-gray-500">
-				Brief description of this code.
-			</p>
+			<HelpText>Brief description of this code.</HelpText>
 		</div>
 	);
 }

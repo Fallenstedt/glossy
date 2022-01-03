@@ -23,8 +23,16 @@ export function useMirrorTheme(
 			if (!mymirror) {
 				return;
 			}
+
 			mymirror.setOption("theme", newtheme);
 			setTheme(newtheme);
+			const el = document.querySelector(".CodeMirror") as HTMLDivElement;
+			if (el) {
+				const s = window.getComputedStyle(el);
+
+				const background = s.backgroundColor;
+				console.log({ background });
+			}
 		},
 		[mymirror]
 	);
