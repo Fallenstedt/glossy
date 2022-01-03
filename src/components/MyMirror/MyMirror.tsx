@@ -147,6 +147,8 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 
 			setMyMirror(m);
 			setTimeout(() => m.refresh(), 10);
+			setTimeout(() => m.refresh(), 50);
+			setTimeout(() => m.refresh(), 100);
 		}
 	}, [container, myMirror]);
 	return myMirror;
