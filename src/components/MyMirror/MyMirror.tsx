@@ -1,4 +1,5 @@
 import CodeMirror from "codemirror";
+import "codemirror/addon/display/autorefresh.js";
 import "codemirror/mode/apl/apl.js";
 import "codemirror/mode/asciiarmor/asciiarmor.js";
 import "codemirror/mode/asn.1/asn.1.js";
@@ -141,6 +142,7 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 				theme: CODE_MIRROR_DEFAULTS.THEME,
 				viewportMargin: Infinity,
 				lineNumbers: true,
+				autoRefresh: true,
 			});
 
 			setMyMirror(m);
