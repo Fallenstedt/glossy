@@ -112,6 +112,7 @@ export const CODE_MIRROR_MODES = [
 	"ttcn",
 	"ttcn-cfg",
 	"turtle",
+	"typescript",
 	"twig",
 	"vb",
 	"vbscript",

@@ -41,6 +41,10 @@ export class Comment {
 		return this._callout.querySelector("i")?.getAttribute("data-value");
 	}
 
+	public setDataValue(nextVal: string) {
+		this._callout.querySelector("i")?.setAttribute("data-value", nextVal);
+	}
+
 	public delete() {
 		this.widget?.clear();
 		this.onCommentUpdate();

@@ -37,8 +37,19 @@ export class Comments {
 		if (i < 0) {
 			return;
 		}
+		// remove from mirror
 		comment.delete();
+
+		// remove from comments array
 		this.comments.splice(i, 1);
+
+		// decrement each comment from the deleted index
+		const decrement = this.comments.slice(i);
+		decrement.forEach((c) => {
+			c.setDataValue(String(Number(c.getDataValue()) - 1));
+		});
+
+		// announce channges
 		this.invokeCallbacks();
 	}
 
