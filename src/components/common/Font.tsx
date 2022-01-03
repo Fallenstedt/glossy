@@ -24,7 +24,7 @@ export function LargeText(props: { children: React.ReactNode }) {
 
 export function SmallText(props: { children: React.ReactNode }) {
 	return (
-		<p className="font-inter-light text-md leading-7 text-gray-900 sm:text-md sm:truncate">
+		<p className="font-inter-light text-sm leading-7 text-gray-900 sm:text-md sm:truncate">
 			{props.children}
 		</p>
 	);
