@@ -8,6 +8,12 @@ export function H1(props: { children: React.ReactNode }) {
 	);
 }
 
+export function H2(props: { children: React.ReactNode }) {
+	<h2 className="font-inter-med block text-sm font-medium text-gray-700">
+		{props.children}
+	</h2>;
+}
+
 export function LargeText(props: { children: React.ReactNode }) {
 	return (
 		<p className="font-inter-light text-xl leading-7 text-gray-900 sm:text-2xl sm:truncate">

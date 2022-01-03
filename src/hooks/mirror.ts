@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { CODE_MIRROR_DEFAULTS } from "../util/constants";
 
 export const MirrorContext = React.createContext<CodeMirror.Editor | undefined>(

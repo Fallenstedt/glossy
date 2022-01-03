@@ -2,7 +2,7 @@ import "./comments.css";
 import { useCallback, useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { Comment } from "../../hooks/callouts/comment";
-import { HelpText, SmallText } from "../common/Font";
+import { HelpText } from "../common/Font";
 
 function useCurrentCallouts() {
 	const callouts = useCallouts();

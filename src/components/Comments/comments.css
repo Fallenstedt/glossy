@@ -1,7 +1,7 @@
 .conum[data-value] {
 	display: inline-block;
 	color: #fff !important;
-	background-color: rgba(0, 0, 0, 0.8);
+	background-color: #374151;
 	border-radius: 100px;
 	text-align: center;
 	width: 1.67em;

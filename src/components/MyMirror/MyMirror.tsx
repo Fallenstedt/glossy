@@ -210,6 +210,8 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 					above: true,
 				});
 				comment.widget = widget;
+
+				movedByMouse = false;
 			}
 		});
 	}, [mymirror, callouts]);

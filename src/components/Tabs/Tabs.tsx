@@ -7,7 +7,7 @@ import {
 	CODE_MIRROR_THEMES,
 	CALLOUT_TABS,
 } from "../../util/constants";
-import { SmallText } from "../common/Font";
+import { Label, SmallText } from "../common/Font";
 import { ModeSelect } from "../ModeSelect/ModeSelect";
 import { ThemeSelect } from "../ThemeSelect/ThemeSelect";
 import { TabItem } from "./TabItem";
@@ -64,9 +64,8 @@ function RenderAnnotate() {
 
 	return (
 		<>
-			<SmallText>
-				Add callouts by clicking the lines of code that need explanation.
-			</SmallText>
+			<Label htmlFor="">Document Your Code</Label>
+			<SmallText>Add a callout by clicking code.</SmallText>
 			<SmallText>{remainingComments}</SmallText>
 		</>
 	);
