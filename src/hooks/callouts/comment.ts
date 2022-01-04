@@ -45,6 +45,10 @@ export class Comment {
 		this._callout.querySelector("i")?.setAttribute("data-value", nextVal);
 	}
 
+	public calloutExists() {
+		return document.body.contains(this._callout);
+	}
+
 	public delete() {
 		this.widget?.clear();
 		this.onCommentUpdate();

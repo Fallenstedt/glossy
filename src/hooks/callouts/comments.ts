@@ -1,3 +1,4 @@
+import { textChangeRangeIsUnchanged } from "typescript";
 import { Comment } from "./comment";
 import { CommentCallback } from "./types";
 
@@ -30,6 +31,14 @@ export class Comments {
 
 		this.invokeCallbacks();
 		return c;
+	}
+
+	public refreshComments() {
+		this.allComments().forEach((c) => {
+			if (!c.calloutExists()) {
+				this.removeComment(c);
+			}
+		});
 	}
 
 	public removeComment(comment: Comment) {

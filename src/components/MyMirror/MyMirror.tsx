@@ -143,6 +143,8 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 				viewportMargin: Infinity,
 				lineNumbers: true,
 				autoRefresh: true,
+				scrollbarStyle: "null",
+				lineWrapping: true,
 			});
 
 			setMyMirror(m);
@@ -192,6 +194,10 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 
 		mymirror.on("beforeChange", () => {
 			movedByMouse = false;
+		});
+
+		mymirror.on("keyup", () => {
+			callouts.comments.refreshComments();
 		});
 
 		mymirror.on("cursorActivity", (e: CodeMirror.Editor) => {

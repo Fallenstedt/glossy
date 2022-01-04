@@ -1,5 +1,5 @@
 export enum CALLOUT_TABS {
-	PASTE_YOUR_CODE = "1. Paste Your Code",
+	PASTE_YOUR_CODE = "1. Edit",
 	ANNOTATE = "2. Annotate",
 	EXPORT = "3. Export",
 	UNKNOWN = "Unknown",

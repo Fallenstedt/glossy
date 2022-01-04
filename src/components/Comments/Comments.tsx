@@ -2,7 +2,8 @@ import "./comments.css";
 import { useCallback, useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { Comment } from "../../hooks/callouts/comment";
-import { HelpText } from "../common/Font";
+import { HelpText, SmallText } from "../common/Font";
+import { CALLOUT_TABS } from "../../util/constants";
 
 function useCurrentCallouts() {
 	const callouts = useCallouts();
@@ -17,14 +18,41 @@ function useCurrentCallouts() {
 	return currentComments;
 }
 
+function useCurrentTab() {
+	const callouts = useCallouts();
+	const [tab, setTab] = useState(callouts.tabs.tab);
+	useEffect(() => {
+		const unsubscribe = callouts.onTabUpdate((t) => setTab(t));
+
+		return () => unsubscribe();
+	}, [callouts]);
+
+	return tab;
+}
+
 export function OrderedListOfComments() {
 	const currentComments = useCurrentCallouts();
+	const tab = useCurrentTab();
 
-	const comments = currentComments.map((comment) => (
-		<CommentBox key={comment.id} comment={comment}>
-			{comment.content}
-		</CommentBox>
-	));
+	const comments = currentComments.map((comment) => {
+		if (tab === CALLOUT_TABS.EXPORT) {
+			if (comment.content.length) {
+				return (
+					<div className="flex flex-row items-center py-2" key={comment.id}>
+						<i className="conum mr-2" data-value={comment.getDataValue()}></i>
+						<SmallText>{comment.content}</SmallText>
+					</div>
+				);
+			} else {
+				return null;
+			}
+		}
+		return (
+			<CommentBox key={comment.id} comment={comment}>
+				{comment.content}
+			</CommentBox>
+		);
+	});
 
 	return <div className="mt-10">{comments}</div>;
 }
