@@ -54,7 +54,13 @@ export function OrderedListOfComments() {
 		);
 	});
 
-	return <div className="mt-10">{comments}</div>;
+	if (comments.length) {
+		return (
+			<div className="shadow rounded-md bg-white p-10 mt-10">{comments}</div>
+		);
+	} else {
+		return null;
+	}
 }
 
 interface CommentBoxProps {

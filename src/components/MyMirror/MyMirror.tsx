@@ -238,12 +238,15 @@ export function MyMirror() {
 
 	return (
 		<MirrorProvider value={mymirror}>
-			<div className="shadow rounded-md bg-white p-10 mt-10">
-				<Tabs
-					onChange={(tab: CALLOUT_TABS) => {
-						callouts.tabs.tab = tab;
-					}}
-				/>
+			<Tabs
+				onChange={(tab: CALLOUT_TABS) => {
+					callouts.tabs.tab = tab;
+				}}
+			/>
+			<div
+				className="shadow rounded-md p-10 mt-10"
+				style={{ backgroundColor: "#f9fafb" }}
+			>
 				<div ref={container} className="drop-shadow-xl">
 					<div className="flex justify-between relative z-10 h-0 top-3 pl-3">
 						<svg
@@ -281,8 +284,8 @@ export function MyMirror() {
 						</svg>
 					</div>
 				</div>
-				<OrderedListOfComments />
 			</div>
+			<OrderedListOfComments />
 		</MirrorProvider>
 	);
 }

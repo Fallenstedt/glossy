@@ -13,6 +13,7 @@ import { ThemeSelect } from "../ThemeSelect/ThemeSelect";
 import { TabItem } from "./TabItem";
 import { TabPanel } from "./TabPanel";
 import { TabsProps } from "./types";
+import { ColorPick } from "../ColorPick/ColorPick";
 
 function RenderPrepare() {
 	const mymirror = useMirror();
@@ -32,6 +33,9 @@ function RenderPrepare() {
 					currentMode={mode}
 					onModeChange={onModeChange}
 				/>
+				<div className="relative z-30">
+					<ColorPick />
+				</div>
 			</div>
 		</>
 	);
@@ -79,19 +83,23 @@ export function Tabs(props: TabsProps) {
 	]);
 
 	return (
-		<Tab.Group
-			onChange={(i: number) => props.onChange(steps[i] ?? CALLOUT_TABS.UNKNOWN)}
-		>
-			<Tab.List className="flex p-1 space-x-1 bg-zinc-300/20 rounded-xl mb-2">
-				<TabItem>{steps[0]}</TabItem>
-				<TabItem>{steps[1]}</TabItem>
-				<TabItem>{steps[2]}</TabItem>
-			</Tab.List>
-			<Tab.Panels>
-				<TabPanel>{RenderPrepare()}</TabPanel>
-				<TabPanel>{RenderAnnotate()}</TabPanel>
-				<TabPanel>sup</TabPanel>
-			</Tab.Panels>
-		</Tab.Group>
+		<div className="shadow rounded-md bg-white p-10 mt-10">
+			<Tab.Group
+				onChange={(i: number) =>
+					props.onChange(steps[i] ?? CALLOUT_TABS.UNKNOWN)
+				}
+			>
+				<Tab.List className="flex p-1 space-x-1 bg-zinc-300/20 rounded-xl mb-2">
+					<TabItem>{steps[0]}</TabItem>
+					<TabItem>{steps[1]}</TabItem>
+					<TabItem>{steps[2]}</TabItem>
+				</Tab.List>
+				<Tab.Panels>
+					<TabPanel>{RenderPrepare()}</TabPanel>
+					<TabPanel>{RenderAnnotate()}</TabPanel>
+					<TabPanel>sup</TabPanel>
+				</Tab.Panels>
+			</Tab.Group>
+		</div>
 	);
 }
