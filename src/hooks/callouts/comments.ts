@@ -1,4 +1,3 @@
-import { textChangeRangeIsUnchanged } from "typescript";
 import { Comment } from "./comment";
 import { CommentCallback } from "./types";
 
