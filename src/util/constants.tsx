@@ -1,3 +1,4 @@
+export const DEFAULT_COLOR = "#9AD4DD";
 export enum CALLOUT_TABS {
 	PASTE_YOUR_CODE = "1. Edit",
 	ANNOTATE = "2. Annotate",

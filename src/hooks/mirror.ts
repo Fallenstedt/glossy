@@ -7,9 +7,7 @@ export const MirrorContext = React.createContext<CodeMirror.Editor | undefined>(
 export const MirrorProvider = MirrorContext.Provider;
 export function useMirror() {
 	const context = useContext(MirrorContext);
-	// if (!context) {
-	// 	throw new Error("Failed to create Mirror Context. Was it initalized?");
-	// }
+
 	return context;
 }
 

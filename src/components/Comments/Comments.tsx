@@ -55,9 +55,7 @@ export function OrderedListOfComments() {
 	});
 
 	if (comments.length) {
-		return (
-			<div className="shadow rounded-md bg-white p-10 mt-10">{comments}</div>
-		);
+		return <div className="shadow rounded-b-md bg-white p-10">{comments}</div>;
 	} else {
 		return null;
 	}

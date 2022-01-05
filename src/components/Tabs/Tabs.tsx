@@ -21,23 +21,19 @@ function RenderPrepare() {
 	const [mode, onModeChange] = useMirrorMode(mymirror);
 
 	return (
-		<>
-			<div className="flex flex-row gap-x-5 mb-4">
-				<ThemeSelect
-					themes={CODE_MIRROR_THEMES}
-					currentTheme={theme}
-					onThemeChange={onThemeChange}
-				/>
-				<ModeSelect
-					modes={CODE_MIRROR_MODES}
-					currentMode={mode}
-					onModeChange={onModeChange}
-				/>
-				<div className="relative z-30">
-					<ColorPick />
-				</div>
-			</div>
-		</>
+		<div className="flex flex-row flex-wrap items-baseline gap-x-5 pb-4">
+			<ThemeSelect
+				themes={CODE_MIRROR_THEMES}
+				currentTheme={theme}
+				onThemeChange={onThemeChange}
+			/>
+			<ModeSelect
+				modes={CODE_MIRROR_MODES}
+				currentMode={mode}
+				onModeChange={onModeChange}
+			/>
+			<ColorPick />
+		</div>
 	);
 }
 
@@ -69,8 +65,7 @@ function RenderAnnotate() {
 	return (
 		<>
 			<Label htmlFor="">Document Your Code</Label>
-			<SmallText>Add a callout by clicking code.</SmallText>
-			<SmallText>{remainingComments}</SmallText>
+			<SmallText>Add a callout by clicking code. {remainingComments}</SmallText>
 		</>
 	);
 }
@@ -83,7 +78,7 @@ export function Tabs(props: TabsProps) {
 	]);
 
 	return (
-		<div className="shadow rounded-md bg-white p-10 mt-10">
+		<div className="shadow rounded-t-md bg-white px-10 pt-5 mt-10">
 			<Tab.Group
 				onChange={(i: number) =>
 					props.onChange(steps[i] ?? CALLOUT_TABS.UNKNOWN)
@@ -94,7 +89,7 @@ export function Tabs(props: TabsProps) {
 					<TabItem>{steps[1]}</TabItem>
 					<TabItem>{steps[2]}</TabItem>
 				</Tab.List>
-				<Tab.Panels>
+				<Tab.Panels className={"h-auto"}>
 					<TabPanel>{RenderPrepare()}</TabPanel>
 					<TabPanel>{RenderAnnotate()}</TabPanel>
 					<TabPanel>sup</TabPanel>
