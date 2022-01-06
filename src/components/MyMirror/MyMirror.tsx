@@ -175,6 +175,34 @@ function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
 	}, [mymirror, callouts]);
 }
 
+function useHover(mymirror: CodeMirror.Editor | undefined) {
+	// const callouts = useCallouts();
+
+	useEffect(() => {
+		if (!mymirror) {
+			return;
+		}
+
+		const onMouseMove = (e: MouseEvent) => {
+			const doc = mymirror.getDoc();
+			const coords = mymirror.coordsChar({
+				left: e.clientX,
+				top: e.clientY,
+			});
+			const line = doc.getLine(coords.line);
+			console.log(line);
+			// const token = mymirror.getTokenAt(coords);
+			// console.log(token);
+		};
+		const el = mymirror.getWrapperElement();
+		el.addEventListener("mousemove", onMouseMove);
+
+		return () => {
+			el.removeEventListener("mousemove", onMouseMove);
+		};
+	}, [mymirror]);
+}
+
 function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 	const callouts = useCallouts();
 
@@ -184,27 +212,23 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 		}
 
 		let movedByMouse = false;
-
-		mymirror.on("mousedown", () => {
+		const mousedown = () => {
 			movedByMouse = true;
-		});
-
-		mymirror.on("keydown", () => {
+		};
+		const keydown = () => {
 			movedByMouse = false;
-		});
-
-		mymirror.on("beforeChange", () => {
+		};
+		const beforechange = () => {
 			movedByMouse = false;
-		});
-
-		mymirror.on("keyup", () => {
+		};
+		const keyup = () => {
 			callouts.comments.refreshComments();
-		});
-
-		mymirror.on("cursorActivity", (e: CodeMirror.Editor) => {
+		};
+		const cursorActivity = (e: CodeMirror.Editor) => {
 			if (callouts.tabs.tab !== CALLOUT_TABS.ANNOTATE) {
 				return;
 			}
+			// Click event
 			if (movedByMouse) {
 				const doc = e.getDoc();
 				const cursor = doc.getCursor();
@@ -228,7 +252,20 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 
 				movedByMouse = false;
 			}
-		});
+		};
+		mymirror.on("mousedown", mousedown);
+		mymirror.on("keydown", keydown);
+		mymirror.on("beforeChange", beforechange);
+		mymirror.on("keyup", keyup);
+		mymirror.on("cursorActivity", cursorActivity);
+
+		return () => {
+			mymirror.off("mousedown", mousedown);
+			mymirror.off("keydown", keydown);
+			mymirror.off("beforeChange", beforechange);
+			mymirror.off("keyup", keyup);
+			mymirror.off("cursorActivity", cursorActivity);
+		};
 	}, [mymirror, callouts]);
 }
 
@@ -238,6 +275,7 @@ export function MyMirror() {
 	const container = useRef<HTMLDivElement>(null);
 
 	const mymirror = useInitializeMyMirror(container);
+	useHover(mymirror);
 	useAddComment(mymirror);
 	useSetReadOnly(mymirror);
 
