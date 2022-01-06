@@ -49,7 +49,11 @@ export function useMirrorMode(
 				return;
 			}
 
-			mymirror.setOption("mode", newmode);
+			if (newmode === "typescript") {
+				mymirror.setOption("mode", "text/typescript");
+			} else {
+				mymirror.setOption("mode", newmode);
+			}
 
 			setMode(newmode);
 		},

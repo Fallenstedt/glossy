@@ -52,6 +52,7 @@ export const CODE_MIRROR_MODES = [
 	"http",
 	"idl",
 	"javascript",
+	"typescript",
 	"jinja2",
 	"jsx",
 	"julia",
