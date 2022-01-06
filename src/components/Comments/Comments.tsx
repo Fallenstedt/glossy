@@ -55,7 +55,9 @@ export function OrderedListOfComments() {
 	});
 
 	if (comments.length) {
-		return <div className="shadow rounded-b-md bg-white p-10">{comments}</div>;
+		return (
+			<div className="shadow rounded-b-md bg-white p-10 mb-10">{comments}</div>
+		);
 	} else {
 		return null;
 	}
@@ -82,7 +84,7 @@ export function CommentBox(props: CommentBoxProps) {
 					htmlFor="about"
 					className="font-inter-med block text-sm font-medium text-gray-700"
 				>
-					Comment{" "}
+					Callout{" "}
 					<i className="conum" data-value={props.comment.getDataValue()}></i>
 				</label>
 				<button

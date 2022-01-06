@@ -218,10 +218,13 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 					return;
 				}
 
-				const widget = doc.addLineWidget(cursor.line, comment.callout, {
-					above: true,
-				});
-				comment.widget = widget;
+				const bookmark = doc.setBookmark(
+					CodeMirror.Pos(cursor.line, line.length),
+					{
+						widget: comment.callout,
+					}
+				);
+				comment.bookmark = bookmark;
 
 				movedByMouse = false;
 			}

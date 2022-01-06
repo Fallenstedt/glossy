@@ -6,9 +6,11 @@ interface CommentOpts {
 	onCommentUpdate: () => void;
 }
 
+type Bookmark = CodeMirror.TextMarker<CodeMirror.Position>;
+
 export class Comment {
 	public readonly id: string = new Date().toISOString();
-	public widget?: CodeMirror.LineWidget;
+	public bookmark?: Bookmark;
 	private onCommentUpdate: () => void;
 	private _content: string = "";
 	private _callout: HTMLElement;
@@ -50,7 +52,7 @@ export class Comment {
 	}
 
 	public delete() {
-		this.widget?.clear();
+		this.bookmark?.clear();
 		this.onCommentUpdate();
 	}
 }

@@ -74,7 +74,7 @@ export class Comments {
 		el.className = "conum";
 		el.setAttribute("data-value", num.toString());
 
-		const msg = document.createElement("div");
+		const msg = document.createElement("span");
 		msg.appendChild(el);
 		return msg;
 	}
