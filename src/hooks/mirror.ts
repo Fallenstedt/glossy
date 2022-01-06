@@ -107,7 +107,23 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 			return;
 		}
 
-		function removeLatestGhostOnTabChange(mymirror: CodeMirror.Editor) {
+		function removeGhostOnMouseLeave(mymirror: CodeMirror.Editor) {
+			const onMouseLeave = (e: MouseEvent) => {
+				const latest = callouts.comments.latestComment();
+				if (latest && latest.ghost === true) {
+					callouts.comments.removeComment(latest);
+				}
+			};
+
+			const el = mymirror.getWrapperElement();
+			el.addEventListener("mouseleave", onMouseLeave);
+
+			return () => {
+				el.removeEventListener("mouseleave", onMouseLeave);
+			};
+		}
+
+		function removeLatestGhostOnTabChange() {
 			const removeGhost = (tab: CALLOUT_TABS) => {
 				if (tab !== CALLOUT_TABS.ANNOTATE) {
 					// remove the ghost comment if there is one
@@ -172,13 +188,14 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 			};
 		}
 
-		const unsubscribeFromGhostOnTabChange =
-			removeLatestGhostOnTabChange(mymirror);
+		const unsubscribeFromGhostOnTabChange = removeLatestGhostOnTabChange();
 		const unsubscribeFromGhostMoveMouse = moveGhostOnMouseMove(mymirror);
+		const unsubscribeFromMouseLeave = removeGhostOnMouseLeave(mymirror);
 
 		return () => {
 			unsubscribeFromGhostMoveMouse();
 			unsubscribeFromGhostOnTabChange();
+			unsubscribeFromMouseLeave();
 		};
 	}, [mymirror, callouts]);
 }
