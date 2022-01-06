@@ -123,14 +123,18 @@ import "codemirror/mode/yaml-frontmatter/yaml-frontmatter.js";
 import "codemirror/mode/yaml/yaml.js";
 import "codemirror/mode/z80/z80.js";
 import React, { useEffect, useRef, useState } from "react";
-import { MirrorProvider } from "../../hooks/mirror";
+import {
+	MirrorProvider,
+	useAddComment,
+	useGhost,
+	useSetReadOnly,
+} from "../../hooks/mirror";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { CODE_MIRROR_DEFAULTS, CALLOUT_TABS } from "../../util/constants";
 import { OrderedListOfComments } from "../Comments/Comments";
 import { Tabs } from "../Tabs/Tabs";
 import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
-import { Comment } from "../../hooks/callouts/comment";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -156,163 +160,6 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 		}
 	}, [container, myMirror]);
 	return myMirror;
-}
-
-function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
-	const callouts = useCallouts();
-	useEffect(() => {
-		const toggleReadOnly = (currenttab: CALLOUT_TABS) => {
-			if (currenttab === CALLOUT_TABS.PASTE_YOUR_CODE) {
-				mymirror?.setOption("readOnly", false);
-				mymirror?.setOption("cursorBlinkRate", 530);
-			} else {
-				mymirror?.setOption("readOnly", true);
-				mymirror?.setOption("cursorBlinkRate", -1);
-			}
-		};
-		const unsubscribe = callouts.onTabUpdate(toggleReadOnly);
-
-		return () => unsubscribe();
-	}, [mymirror, callouts]);
-}
-
-function useGhost(mymirror: CodeMirror.Editor | undefined) {
-	const callouts = useCallouts();
-
-	useEffect(() => {
-		if (!mymirror) {
-			return;
-		}
-
-		function removeLatestGhostOnTabChange(mymirror: CodeMirror.Editor) {
-			const removeGhost = (tab: CALLOUT_TABS) => {
-				if (tab !== CALLOUT_TABS.ANNOTATE) {
-					// remove the ghost comment if there is one
-					const latest = callouts.comments.latestComment();
-					if (latest && latest.ghost === true) {
-						console.log({ latest });
-						callouts.comments.removeComment(latest);
-					}
-					return;
-				}
-			};
-			const unsubscribe = callouts.onTabUpdate(removeGhost);
-			return unsubscribe;
-		}
-
-		function moveGhostOnMouseMove(mymirror: CodeMirror.Editor) {
-			const onMouseMove = (e: MouseEvent) => {
-				const tab = callouts.tabs.tab;
-				if (tab !== CALLOUT_TABS.ANNOTATE) {
-					// remove the ghost comment if there is one
-					const latest = callouts.comments.latestComment();
-					if (latest && latest.ghost === true) {
-						console.log({ latest });
-						callouts.comments.removeComment(latest);
-						mymirror.refresh();
-					}
-					return;
-				}
-
-				const pos = mymirror.coordsChar({
-					left: e.clientX,
-					top: e.clientY + window.scrollY,
-				});
-
-				const doc = mymirror.getDoc();
-				const line = doc.getLine(pos.line);
-
-				let comment: Comment | null = callouts.comments.latestComment();
-				if (!comment || comment.ghost === false) {
-					comment = callouts.comments.addComment();
-				}
-				if (!comment) {
-					return;
-				}
-				if (comment.bookmark) {
-					comment.bookmark.clear();
-					comment.bookmark = undefined;
-				}
-
-				const bookmark = doc.setBookmark(
-					CodeMirror.Pos(pos.line, line.length),
-					{
-						widget: comment.callout,
-					}
-				);
-				comment.bookmark = bookmark;
-			};
-
-			const el = mymirror.getWrapperElement();
-			el.addEventListener("mousemove", onMouseMove);
-
-			return () => {
-				el.removeEventListener("mousemove", onMouseMove);
-			};
-		}
-
-		const unsubscribeFromGhostOnTabChange =
-			removeLatestGhostOnTabChange(mymirror);
-		const unsubscribeFromGhostMoveMouse = moveGhostOnMouseMove(mymirror);
-
-		return () => {
-			unsubscribeFromGhostMoveMouse();
-			unsubscribeFromGhostOnTabChange();
-		};
-	}, [mymirror, callouts]);
-}
-
-function useAddComment(mymirror: CodeMirror.Editor | undefined) {
-	const callouts = useCallouts();
-
-	useEffect(() => {
-		if (!mymirror) {
-			return;
-		}
-
-		let movedByMouse = false;
-		const mousedown = () => {
-			movedByMouse = true;
-		};
-		const keydown = () => {
-			movedByMouse = false;
-		};
-		const beforechange = () => {
-			movedByMouse = false;
-		};
-		const keyup = () => {
-			callouts.comments.refreshComments();
-		};
-		const cursorActivity = (e: CodeMirror.Editor) => {
-			if (callouts.tabs.tab !== CALLOUT_TABS.ANNOTATE) {
-				return;
-			}
-			// Click event
-			if (movedByMouse) {
-				const comments = callouts.comments.allComments();
-				const latestComment = comments[comments.length - 1];
-				if (!latestComment) {
-					return;
-				}
-				latestComment.ghost = false;
-
-				movedByMouse = false;
-			}
-		};
-		mymirror.on("mousedown", mousedown);
-		mymirror.on("keydown", keydown);
-		mymirror.on("beforeChange", beforechange);
-		mymirror.on("keyup", keyup);
-		mymirror.on("cursorActivity", cursorActivity);
-
-		return () => {
-			mymirror.off("mousedown", mousedown);
-			mymirror.off("keydown", keydown);
-			mymirror.off("beforeChange", beforechange);
-			mymirror.off("keyup", keyup);
-			mymirror.off("cursorActivity", cursorActivity);
-		};
-	}, [mymirror, callouts]);
 }
 
 export function MyMirror() {

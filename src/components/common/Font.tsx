@@ -2,7 +2,7 @@ import React from "react";
 
 export function H1(props: { children: React.ReactNode }) {
 	return (
-		<h1 className="font-inter-med text-4xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+		<h1 className="font-inter-med text-4xl font-bold leading-7 text-gray-900 sm:text-3xl">
 			{props.children}
 		</h1>
 	);
@@ -16,7 +16,7 @@ export function H2(props: { children: React.ReactNode }) {
 
 export function LargeText(props: { children: React.ReactNode }) {
 	return (
-		<p className="font-inter-light text-xl leading-7 text-gray-900 sm:text-2xl sm:truncate">
+		<p className="font-inter-light text-xl leading-7 text-gray-900 sm:text-2xl">
 			{props.children}
 		</p>
 	);
@@ -24,7 +24,7 @@ export function LargeText(props: { children: React.ReactNode }) {
 
 export function SmallText(props: { children: React.ReactNode }) {
 	return (
-		<p className="font-inter-light text-sm leading-7 text-gray-900 sm:text-md sm:truncate">
+		<p className="font-inter-light text-sm leading-7 text-gray-900 sm:text-md">
 			{props.children}
 		</p>
 	);

@@ -20,7 +20,6 @@
 .conum-ghost[data-value] {
 	background-color: #7e7e7e;
 }
-
-.inverted {
+.conum[data-value].inverted {
 	filter: invert();
 }

@@ -71,6 +71,14 @@ export class Comment {
 		this.onCommentUpdate();
 	}
 
+	public removeInvertFilter() {
+		this._callout.querySelector("i")?.classList.remove("invert");
+	}
+
+	public addInvertFilter() {
+		this._callout.querySelector("i")?.classList.add("invert");
+	}
+
 	private removeGhostClass() {
 		this._callout.querySelector("i")?.classList.remove("conum-ghost");
 	}

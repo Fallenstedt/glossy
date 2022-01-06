@@ -7,6 +7,8 @@ export class Comments {
 	constructor(private readonly callbacks: CommentCallback[]) {}
 
 	private readonly comments: Comment[] = [];
+	// todo pass this in with addComment
+	private darkTheme: boolean = false;
 
 	public allComments(): Comment[] {
 		return this.comments.slice();
@@ -70,9 +72,23 @@ export class Comments {
 		this.callbacks.forEach((cb) => cb(this.allComments()));
 	};
 
+	public makeCommentsDark() {
+		this.comments.forEach((comment) => {
+			comment.removeInvertFilter();
+		});
+		this.darkTheme = false;
+	}
+
+	public makeCommentsBright() {
+		this.comments.forEach((comment) => {
+			comment.addInvertFilter();
+		});
+		this.darkTheme = true;
+	}
+
 	private createCallout(num: number) {
 		const el = document.createElement("i");
-		el.className = "conum conum-ghost";
+		el.className = `conum conum-ghost ${this.darkTheme ? "invert" : ""}`;
 		el.setAttribute("data-value", num.toString());
 
 		const msg = document.createElement("span");
