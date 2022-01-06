@@ -3,6 +3,7 @@ import CodeMirror from "codemirror";
 interface CommentOpts {
 	callout: HTMLElement;
 	content: string;
+	ghost: boolean;
 	onCommentUpdate: () => void;
 }
 
@@ -14,15 +15,29 @@ export class Comment {
 	private onCommentUpdate: () => void;
 	private _content: string = "";
 	private _callout: HTMLElement;
+	private _ghost: boolean;
 
 	constructor(opts: CommentOpts) {
 		this._content = opts.content;
 		this._callout = opts.callout;
+		this._ghost = opts.ghost;
 		this.onCommentUpdate = opts.onCommentUpdate;
 	}
 
 	public set content(c: string) {
 		this._content = c;
+		this.onCommentUpdate();
+	}
+
+	public get ghost() {
+		return this._ghost;
+	}
+
+	public set ghost(v: boolean) {
+		if (v === false) {
+			this.removeGhostClass();
+		}
+		this._ghost = v;
 		this.onCommentUpdate();
 	}
 
@@ -54,5 +69,9 @@ export class Comment {
 	public delete() {
 		this.bookmark?.clear();
 		this.onCommentUpdate();
+	}
+
+	private removeGhostClass() {
+		this._callout.querySelector("i")?.classList.remove("conum-ghost");
 	}
 }

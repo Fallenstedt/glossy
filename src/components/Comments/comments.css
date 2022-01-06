@@ -17,6 +17,10 @@
 	content: attr(data-value);
 }
 
+.conum-ghost[data-value] {
+	background-color: #7e7e7e;
+}
+
 .inverted {
 	filter: invert();
 }

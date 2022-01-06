@@ -1,4 +1,4 @@
-import CodeMirror from "codemirror";
+import CodeMirror, { LineHandle } from "codemirror";
 import "codemirror/addon/display/autorefresh.js";
 import "codemirror/mode/apl/apl.js";
 import "codemirror/mode/asciiarmor/asciiarmor.js";
@@ -130,6 +130,7 @@ import { OrderedListOfComments } from "../Comments/Comments";
 import { Tabs } from "../Tabs/Tabs";
 import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
+import { Comment } from "../../hooks/callouts/comment";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -175,32 +176,90 @@ function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
 	}, [mymirror, callouts]);
 }
 
-function useHover(mymirror: CodeMirror.Editor | undefined) {
-	// const callouts = useCallouts();
+function useGhost(mymirror: CodeMirror.Editor | undefined) {
+	const callouts = useCallouts();
 
 	useEffect(() => {
 		if (!mymirror) {
 			return;
 		}
 
-		const onMouseMove = (e: MouseEvent) => {
-			const doc = mymirror.getDoc();
-			const coords = mymirror.coordsChar({
-				left: e.clientX,
-				top: e.clientY,
-			});
-			const line = doc.getLine(coords.line);
-			console.log(line);
-			// const token = mymirror.getTokenAt(coords);
-			// console.log(token);
-		};
-		const el = mymirror.getWrapperElement();
-		el.addEventListener("mousemove", onMouseMove);
+		function removeLatestGhostOnTabChange(mymirror: CodeMirror.Editor) {
+			const removeGhost = (tab: CALLOUT_TABS) => {
+				if (tab !== CALLOUT_TABS.ANNOTATE) {
+					// remove the ghost comment if there is one
+					const latest = callouts.comments.latestComment();
+					if (latest && latest.ghost === true) {
+						console.log({ latest });
+						callouts.comments.removeComment(latest);
+					}
+					return;
+				}
+			};
+			const unsubscribe = callouts.onTabUpdate(removeGhost);
+			return unsubscribe;
+		}
+
+		function moveGhostOnMouseMove(mymirror: CodeMirror.Editor) {
+			const onMouseMove = (e: MouseEvent) => {
+				const tab = callouts.tabs.tab;
+				if (tab !== CALLOUT_TABS.ANNOTATE) {
+					// remove the ghost comment if there is one
+					const latest = callouts.comments.latestComment();
+					if (latest && latest.ghost === true) {
+						console.log({ latest });
+						callouts.comments.removeComment(latest);
+						mymirror.refresh();
+					}
+					return;
+				}
+
+				const pos = mymirror.coordsChar({
+					left: e.clientX,
+					top: e.clientY + window.scrollY,
+				});
+
+				const doc = mymirror.getDoc();
+				const line = doc.getLine(pos.line);
+
+				let comment: Comment | null = callouts.comments.latestComment();
+				if (!comment || comment.ghost === false) {
+					comment = callouts.comments.addComment();
+				}
+				if (!comment) {
+					return;
+				}
+				if (comment.bookmark) {
+					comment.bookmark.clear();
+					comment.bookmark = undefined;
+				}
+
+				const bookmark = doc.setBookmark(
+					CodeMirror.Pos(pos.line, line.length),
+					{
+						widget: comment.callout,
+					}
+				);
+				comment.bookmark = bookmark;
+			};
+
+			const el = mymirror.getWrapperElement();
+			el.addEventListener("mousemove", onMouseMove);
+
+			return () => {
+				el.removeEventListener("mousemove", onMouseMove);
+			};
+		}
+
+		const unsubscribeFromGhostOnTabChange =
+			removeLatestGhostOnTabChange(mymirror);
+		const unsubscribeFromGhostMoveMouse = moveGhostOnMouseMove(mymirror);
 
 		return () => {
-			el.removeEventListener("mousemove", onMouseMove);
+			unsubscribeFromGhostMoveMouse();
+			unsubscribeFromGhostOnTabChange();
 		};
-	}, [mymirror]);
+	}, [mymirror, callouts]);
 }
 
 function useAddComment(mymirror: CodeMirror.Editor | undefined) {
@@ -230,25 +289,12 @@ function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			}
 			// Click event
 			if (movedByMouse) {
-				const doc = e.getDoc();
-				const cursor = doc.getCursor();
-				const line = doc.getLine(cursor.line); // get the line contents
-				if (!line.length) {
+				const comments = callouts.comments.allComments();
+				const latestComment = comments[comments.length - 1];
+				if (!latestComment) {
 					return;
 				}
-
-				const comment = callouts.comments.addComment();
-				if (!comment) {
-					return;
-				}
-
-				const bookmark = doc.setBookmark(
-					CodeMirror.Pos(cursor.line, line.length),
-					{
-						widget: comment.callout,
-					}
-				);
-				comment.bookmark = bookmark;
+				latestComment.ghost = false;
 
 				movedByMouse = false;
 			}
@@ -275,7 +321,7 @@ export function MyMirror() {
 	const container = useRef<HTMLDivElement>(null);
 
 	const mymirror = useInitializeMyMirror(container);
-	useHover(mymirror);
+	useGhost(mymirror);
 	useAddComment(mymirror);
 	useSetReadOnly(mymirror);
 

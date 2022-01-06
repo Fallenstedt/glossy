@@ -12,12 +12,17 @@ export class Comments {
 		return this.comments.slice();
 	}
 
+	public latestComment(): Comment | null {
+		return this.comments[this.comments.length - 1];
+	}
+
 	public remainingComments() {
 		return Comments.max - this.comments.length;
 	}
 
 	public addComment(): Comment | null {
-		if (this.commentIndex() === Comments.max - 1) {
+		if (this.comments.length === Comments.max) {
+			console.log("MAX");
 			return null;
 		}
 		const callout = this.createCallout(this.comments.length + 1);
@@ -25,9 +30,9 @@ export class Comments {
 			onCommentUpdate: this.invokeCallbacks,
 			callout,
 			content: "",
+			ghost: true,
 		});
 		this.comments.push(c);
-
 		this.invokeCallbacks();
 		return c;
 	}
@@ -65,13 +70,9 @@ export class Comments {
 		this.callbacks.forEach((cb) => cb(this.allComments()));
 	};
 
-	private commentIndex() {
-		return this.comments.length - 1;
-	}
-
 	private createCallout(num: number) {
 		const el = document.createElement("i");
-		el.className = "conum";
+		el.className = "conum conum-ghost";
 		el.setAttribute("data-value", num.toString());
 
 		const msg = document.createElement("span");
