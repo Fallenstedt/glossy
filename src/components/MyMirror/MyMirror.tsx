@@ -1,4 +1,4 @@
-import CodeMirror, { LineHandle } from "codemirror";
+import CodeMirror from "codemirror";
 import "codemirror/addon/display/autorefresh.js";
 import "codemirror/mode/apl/apl.js";
 import "codemirror/mode/asciiarmor/asciiarmor.js";

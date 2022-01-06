@@ -68,7 +68,7 @@ export function useMirrorTheme(
 				}
 			}
 		},
-		[mymirror]
+		[callouts.comments, mymirror]
 	);
 
 	return [theme, onThemeSelect];
