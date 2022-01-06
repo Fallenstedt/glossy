@@ -38,16 +38,12 @@ export function OrderedListOfComments() {
 		.filter((comment) => comment.ghost === false)
 		.map((comment) => {
 			if (tab === CALLOUT_TABS.EXPORT) {
-				if (comment.content.length) {
-					return (
-						<div className="flex flex-row items-center py-2" key={comment.id}>
-							<i className="conum mr-2" data-value={comment.getDataValue()}></i>
-							<SmallText>{comment.content}</SmallText>
-						</div>
-					);
-				} else {
-					return null;
-				}
+				return (
+					<div className="flex flex-row items-center py-2" key={comment.id}>
+						<i className="conum mr-2" data-value={comment.getDataValue()}></i>
+						<SmallText>{comment.content}</SmallText>
+					</div>
+				);
 			}
 			return (
 				<CommentBox key={comment.id} comment={comment}>

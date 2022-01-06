@@ -17,7 +17,7 @@ export class Comments {
 	}
 
 	public remainingComments() {
-		return Comments.max - this.comments.length;
+		return Comments.max - this.comments.filter((c) => c.ghost === false).length;
 	}
 
 	public addComment(): Comment | null {
