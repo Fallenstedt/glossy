@@ -1,5 +1,7 @@
+import download from "downloadjs";
+import { toPng } from "html-to-image";
 import { Tab } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMirror, useMirrorMode, useMirrorTheme } from "../../hooks/mirror";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import {
@@ -14,6 +16,8 @@ import { TabItem } from "./TabItem";
 import { TabPanel } from "./TabPanel";
 import { TabsProps } from "./types";
 import { ColorPick } from "../ColorPick/ColorPick";
+import { Button } from "../common/Button";
+import { DownloadIcon } from "@heroicons/react/solid";
 
 function RenderPrepare() {
 	const mymirror = useMirror();
@@ -63,10 +67,84 @@ function RenderAnnotate() {
 	}, [callouts]);
 
 	return (
-		<>
+		<div className="pb-4 pt-2 md:pb-0">
 			<Label htmlFor="">Document Your Code</Label>
 			<SmallText>Add a callout by clicking code. {remainingComments}</SmallText>
-		</>
+		</div>
+	);
+}
+
+function RenderExport() {
+	const [loading, setLoading] = useState(false);
+	const callouts = useCallouts();
+
+	const exportImage = useCallback(() => {
+		const region = document.getElementById("export-region");
+		if (!region) {
+			alert("Something went wrong. Devs have been notified");
+			return;
+		}
+
+		setLoading(true);
+		const borderClass = callouts.comments.allComments().length
+			? "rounded-t-md"
+			: "rounded-md";
+		region.classList.add(borderClass, "overflow-hidden");
+
+		toPng(region)
+			.then((dataUrl) => {
+				download(dataUrl, "callouts.png");
+			})
+			.then(() => {
+				region.classList.remove(borderClass, "overflow-hidden");
+			})
+			.catch((err) => {
+				console.error(err);
+				region.classList.remove(borderClass, "overflow-hidden");
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}, [callouts.comments]);
+
+	return (
+		<div className="flex flex-col gap-y-4 md:flex-row md:gap-y-0 gap-x-7 pb-4 md:pb-0">
+			<div>
+				<Label htmlFor="">Download</Label>
+				<div className="flex flex-wrap flex-row gap-x-5">
+					<Button
+						disabled={loading}
+						onClick={exportImage}
+						className="flex flex-row items-center justify-center"
+					>
+						<span>
+							<DownloadIcon className="h-5" />
+						</span>{" "}
+						<SmallText>PNG</SmallText>
+					</Button>
+
+					<Button
+						disabled={true}
+						onClick={() => {}}
+						className="flex flex-row items-center justify-center"
+					>
+						<SmallText>Markdown (Coming Soon)</SmallText>
+					</Button>
+				</div>
+			</div>
+			<div>
+				<Label htmlFor="">Social</Label>
+				<div className="flex flex-wrap flex-row gap-x-5">
+					<Button
+						disabled={true}
+						onClick={() => {}}
+						className="flex flex-row items-center justify-center"
+					>
+						<SmallText>Twitter (Coming Soon)</SmallText>
+					</Button>
+				</div>
+			</div>
+		</div>
 	);
 }
 
@@ -92,7 +170,7 @@ export function Tabs(props: TabsProps) {
 				<Tab.Panels className={"h-auto"}>
 					<TabPanel>{RenderPrepare()}</TabPanel>
 					<TabPanel>{RenderAnnotate()}</TabPanel>
-					<TabPanel>sup</TabPanel>
+					<TabPanel>{RenderExport()}</TabPanel>
 				</Tab.Panels>
 			</Tab.Group>
 		</div>

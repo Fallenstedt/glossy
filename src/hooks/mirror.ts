@@ -108,6 +108,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 		}
 
 		function removeGhostOnMouseLeave(mymirror: CodeMirror.Editor) {
+			const el = mymirror.getWrapperElement();
+
 			const onMouseLeave = (e: MouseEvent) => {
 				const latest = callouts.comments.latestComment();
 				if (latest && latest.ghost === true) {
@@ -115,7 +117,6 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 				}
 			};
 
-			const el = mymirror.getWrapperElement();
 			el.addEventListener("mouseleave", onMouseLeave);
 
 			return () => {

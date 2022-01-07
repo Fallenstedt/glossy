@@ -39,8 +39,10 @@ export function OrderedListOfComments() {
 		.map((comment) => {
 			if (tab === CALLOUT_TABS.EXPORT) {
 				return (
-					<div className="flex flex-row items-center py-2" key={comment.id}>
-						<i className="conum mr-2" data-value={comment.getDataValue()}></i>
+					<div className="flex flex-row py-2" key={comment.id}>
+						<div>
+							<i className="conum mr-2" data-value={comment.getDataValue()}></i>
+						</div>
 						<SmallText>{comment.content}</SmallText>
 					</div>
 				);
@@ -53,9 +55,18 @@ export function OrderedListOfComments() {
 		});
 
 	if (comments.length) {
-		return (
-			<div className="shadow rounded-b-md bg-white p-10 mb-10">{comments}</div>
-		);
+		if (
+			currentComments.every((comment) => comment.content.length === 0) &&
+			tab === CALLOUT_TABS.EXPORT
+		) {
+			return null;
+		} else {
+			return (
+				<div className="shadow rounded-b-md bg-white p-10 mb-10">
+					{comments}
+				</div>
+			);
+		}
 	} else {
 		return null;
 	}
