@@ -63,12 +63,19 @@ export function OrderedListOfComments() {
 		} else {
 			return (
 				<div className="shadow rounded-b-md bg-white p-10">
-					<Label htmlFor="" className="block text-sm font-medium text-gray-700">
-						Document Your Code
-					</Label>
-					<SmallText>
-						Describe your code in callouts below. Descriptions are optional.
-					</SmallText>
+					{tab !== CALLOUT_TABS.EXPORT && (
+						<>
+							<Label
+								htmlFor=""
+								className="block text-sm font-medium text-gray-700"
+							>
+								Document Your Code
+							</Label>
+							<SmallText>
+								Describe your code in callouts below. Descriptions are optional.
+							</SmallText>
+						</>
+					)}
 					{comments}
 				</div>
 			);
