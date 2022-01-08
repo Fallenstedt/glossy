@@ -218,6 +218,5 @@ function reducer(previous, current, index, array) {
 	return returns;
 }
 
-array.reduce(reducer);
-	`,
+array.reduce(reducer);`,
 };

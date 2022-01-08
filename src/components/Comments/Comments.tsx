@@ -2,7 +2,7 @@ import "./comments.css";
 import { useCallback, useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { Comment } from "../../hooks/callouts/comment";
-import { HelpText, SmallText } from "../common/Font";
+import { HelpText, Label, SmallText } from "../common/Font";
 import { CALLOUT_TABS } from "../../util/constants";
 
 function useCurrentCallouts() {
@@ -39,8 +39,8 @@ export function OrderedListOfComments() {
 		.map((comment) => {
 			if (tab === CALLOUT_TABS.EXPORT) {
 				return (
-					<div className="flex flex-row py-2" key={comment.id}>
-						<div>
+					<div className="flex flex-row items-start py-2" key={comment.id}>
+						<div className="pt-1">
 							<i className="conum mr-2" data-value={comment.getDataValue()}></i>
 						</div>
 						<SmallText>{comment.content}</SmallText>
@@ -62,7 +62,13 @@ export function OrderedListOfComments() {
 			return null;
 		} else {
 			return (
-				<div className="shadow rounded-b-md bg-white p-10 mb-10">
+				<div className="shadow rounded-b-md bg-white p-10">
+					<Label htmlFor="" className="block text-sm font-medium text-gray-700">
+						Document Your Code
+					</Label>
+					<SmallText>
+						Describe your code in callouts below. Descriptions are optional.
+					</SmallText>
 					{comments}
 				</div>
 			);

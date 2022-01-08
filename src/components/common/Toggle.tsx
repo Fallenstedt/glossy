@@ -11,7 +11,7 @@ export function Toggle(props: MyToggleProps) {
 			checked={props.checked}
 			onChange={props.onChange}
 			className={`${
-				props.checked ? "bg-blue-600" : "bg-gray-200"
+				props.checked ? "bg-sky-600" : "bg-gray-200"
 			} relative inline-flex items-center h-6 rounded-full w-11 `}
 		>
 			<span className="sr-only">Enable notifications</span>

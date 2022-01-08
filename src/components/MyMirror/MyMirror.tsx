@@ -181,6 +181,7 @@ export function MyMirror() {
 					}}
 				/>
 				<div id="export-region">
+					{/* color background */}
 					<div className="shadow p-10" style={{ backgroundColor: color.color }}>
 						<div ref={container} className="drop-shadow-xl">
 							<div className="flex justify-between relative z-10 h-0 top-3 pl-3">

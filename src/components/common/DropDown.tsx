@@ -14,7 +14,7 @@ export interface DropDownProps {
 
 export function DropDown(props: DropDownProps) {
 	return (
-		<div className={props.className}>
+		<div className={`flex flex-col w-full sm:w-auto ${props.className}`}>
 			<Label
 				htmlFor={props.title}
 				className="block text-sm font-medium text-gray-700"
@@ -43,7 +43,7 @@ export function DropDown(props: DropDownProps) {
 					leaveTo="transform opacity-0 scale-95"
 				>
 					<Menu.Items
-						className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+						className="origin-top-right absolute left-0 mt-2 w-full sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 						style={{
 							maxHeight: "400px",
 							overflowY: "scroll",

@@ -18,6 +18,7 @@ import { TabsProps } from "./types";
 import { ColorPick } from "../ColorPick/ColorPick";
 import { Button } from "../common/Button";
 import { DownloadIcon } from "@heroicons/react/solid";
+import { LineNumbers } from "../LineNumbers/LineNumbers";
 
 function RenderPrepare() {
 	const mymirror = useMirror();
@@ -25,11 +26,12 @@ function RenderPrepare() {
 	const [mode, onModeChange] = useMirrorMode(mymirror);
 
 	return (
-		<div className="flex flex-row flex-wrap items-baseline gap-x-5 pb-4">
+		<div className="flex flex-col md:flex-row flex-wrap items-baseline gap-x-5 gap-y-2 md:gap-y-0 pb-4">
 			<ThemeSelect
 				themes={CODE_MIRROR_THEMES}
 				currentTheme={theme}
 				onThemeChange={onThemeChange}
+				className={"z-30"}
 			/>
 			<ModeSelect
 				modes={CODE_MIRROR_MODES}
@@ -37,6 +39,7 @@ function RenderPrepare() {
 				onModeChange={onModeChange}
 			/>
 			<ColorPick />
+			<LineNumbers />
 		</div>
 	);
 }
@@ -53,10 +56,10 @@ function RenderAnnotate() {
 					message = "All comments added.";
 					break;
 				case 1:
-					message = `You can add ${remainingComments} more comment.`;
+					message = `You can add ${remainingComments} more callout.`;
 					break;
 				default:
-					message = `You can add ${remainingComments} more comments.`;
+					message = `You can add ${remainingComments} more callouts.`;
 					break;
 			}
 
@@ -68,7 +71,7 @@ function RenderAnnotate() {
 
 	return (
 		<div className="pb-4 pt-2 md:pb-0">
-			<Label htmlFor="">Document Your Code</Label>
+			<Label htmlFor="">Add Callouts</Label>
 			<SmallText>Add a callout by clicking code. {remainingComments}</SmallText>
 		</div>
 	);
@@ -162,7 +165,7 @@ export function Tabs(props: TabsProps) {
 					props.onChange(steps[i] ?? CALLOUT_TABS.UNKNOWN)
 				}
 			>
-				<Tab.List className="flex p-1 space-x-1 bg-zinc-300/20 rounded-xl mb-2">
+				<Tab.List className="flex flex-col md:flex-row p-1 space-x-1 bg-zinc-300/20 rounded-xl mb-2">
 					<TabItem>{steps[0]}</TabItem>
 					<TabItem>{steps[1]}</TabItem>
 					<TabItem>{steps[2]}</TabItem>
