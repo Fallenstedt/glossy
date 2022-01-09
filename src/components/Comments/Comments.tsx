@@ -72,7 +72,7 @@ export function OrderedListOfComments() {
 								Document Your Code
 							</Label>
 							<SmallText>
-								Describe your code in callouts below. Descriptions are optional.
+								Describe what this code does. <i>Optional</i>
 							</SmallText>
 						</>
 					)}
