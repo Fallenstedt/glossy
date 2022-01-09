@@ -14,7 +14,7 @@ function App() {
 		<CalloutsProvider value={callouts}>
 			<Container>
 				<header className="text-center">
-					<H1>Callouts 📣</H1>
+					<H1>Glossy</H1>
 					<LargeText>Document and prettify your source code.</LargeText>
 				</header>
 				<MyMirror />
