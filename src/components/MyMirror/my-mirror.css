@@ -4,6 +4,8 @@
 	border-radius: 5px;
 	padding: 10px;
 	padding-top: 30px;
+	min-width: 200px;
+	display: inline-block;
 }
 
 .annotated-text {

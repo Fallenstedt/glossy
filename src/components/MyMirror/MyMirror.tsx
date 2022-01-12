@@ -135,6 +135,7 @@ import { OrderedListOfComments } from "../Comments/Comments";
 import { Tabs } from "../Tabs/Tabs";
 import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
+import { ColorBackground } from "../ColorBackground/ColorBackground";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -180,9 +181,8 @@ export function MyMirror() {
 						callouts.tabs.tab = tab;
 					}}
 				/>
-				<div id="export-region">
-					{/* color background */}
-					<div className="shadow p-10" style={{ backgroundColor: color.color }}>
+				<div id="export-region" className="flex flex-col items-center">
+					<ColorBackground className="w-full flex justify-center">
 						<div ref={container} className="drop-shadow-xl">
 							<div className="flex justify-between relative z-10 h-0 top-3 pl-3">
 								<svg
@@ -220,7 +220,7 @@ export function MyMirror() {
 								</svg>
 							</div>
 						</div>
-					</div>
+					</ColorBackground>
 					<OrderedListOfComments />
 				</div>
 			</ColorProvider>

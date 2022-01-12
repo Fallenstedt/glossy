@@ -62,7 +62,7 @@ export function OrderedListOfComments() {
 			return null;
 		} else {
 			return (
-				<div className="shadow rounded-b-md bg-white p-10">
+				<div className="shadow rounded-b-md bg-white p-10 w-full">
 					{tab !== CALLOUT_TABS.EXPORT && (
 						<>
 							<Label
