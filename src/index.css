@@ -14,11 +14,20 @@
 
 :root {
 	--baby-powder: #f9fafb;
+	--night-shade: #111827;
+}
+
+.nightshade {
+	background-color: var(--night-shade);
+}
+
+.baby-powder {
+	background-color: var(--baby-powder);
 }
 
 html,
 body {
-	background-color: var(--baby-powder);
+	transition: background-color ease-in 50ms;
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */

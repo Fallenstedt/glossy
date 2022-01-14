@@ -1,3 +1,5 @@
+export const FOCUS_RING_CLASS =
+	"focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 focus:ring-offset-gray-100 focus:ring-indigo-500";
 export const DEFAULT_COLOR = "#9AD4DD";
 export enum CALLOUT_TABS {
 	PASTE_YOUR_CODE = "1. Edit",

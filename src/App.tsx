@@ -1,6 +1,8 @@
 import "./App.css";
 import { Container } from "./components/common/Container";
 import { H1, LargeText } from "./components/common/Font";
+import { DarkModeButton } from "./components/DarkModeButton/DarkModeButton";
+import { Header } from "./components/Header/Header";
 import { MyMirror } from "./components/MyMirror/MyMirror";
 import {
 	CalloutsProvider,
@@ -12,11 +14,12 @@ function App() {
 
 	return (
 		<CalloutsProvider value={callouts}>
+			<DarkModeButton />
 			<Container>
-				<header className="text-center">
+				<Header>
 					<H1>Glossy</H1>
 					<LargeText>Document and prettify your source code.</LargeText>
-				</header>
+				</Header>
 				<MyMirror />
 			</Container>
 		</CalloutsProvider>
