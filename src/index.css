@@ -14,7 +14,11 @@
 
 :root {
 	--baby-powder: #f9fafb;
-	--night-shade: #111827;
+	--powder: #eaedf1;
+	--night-shade: #0a0e13;
+	--shade: #192339;
+	--dawn-shade: #202e4b;
+	--day-shade: #28395c;
 }
 
 .nightshade {
@@ -23,6 +27,10 @@
 
 .baby-powder {
 	background-color: var(--baby-powder);
+}
+
+.inverted {
+	filter: invert();
 }
 
 html,

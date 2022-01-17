@@ -127,15 +127,22 @@ import {
 	MirrorProvider,
 	useAddComment,
 	useGhost,
+	useMirrorMode,
+	useMirrorTheme,
 	useSetReadOnly,
 } from "../../hooks/mirror";
-import { useCallouts } from "../../hooks/callouts/callouts";
-import { CODE_MIRROR_DEFAULTS, CALLOUT_TABS } from "../../util/constants";
+
+import {
+	CODE_MIRROR_DEFAULTS,
+	CODE_MIRROR_MODES,
+	CODE_MIRROR_THEMES,
+} from "../../util/constants";
 import { OrderedListOfComments } from "../Comments/Comments";
-import { Tabs } from "../Tabs/Tabs";
 import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
-import { ColorBackground } from "../ColorBackground/ColorBackground";
+import { CodeDropdown } from "../common/CodeDropdown";
+import { CodeButton } from "../common/CodeButton";
+import { PencilIcon } from "@heroicons/react/solid";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -148,7 +155,7 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 				mode: CODE_MIRROR_DEFAULTS.MODE,
 				theme: CODE_MIRROR_DEFAULTS.THEME,
 				viewportMargin: Infinity,
-				lineNumbers: true,
+				lineNumbers: false,
 				autoRefresh: true,
 				scrollbarStyle: "null",
 				lineWrapping: true,
@@ -165,10 +172,12 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 
 export function MyMirror() {
 	const color = useInitializeColor();
-	const callouts = useCallouts();
 	const container = useRef<HTMLDivElement>(null);
 
 	const mymirror = useInitializeMyMirror(container);
+	const [mode, onModeChange] = useMirrorMode(mymirror);
+	const { theme, onThemeSelect } = useMirrorTheme(mymirror);
+
 	useGhost(mymirror);
 	useAddComment(mymirror);
 	useSetReadOnly(mymirror);
@@ -176,51 +185,31 @@ export function MyMirror() {
 	return (
 		<MirrorProvider value={mymirror}>
 			<ColorProvider value={color}>
-				<Tabs
-					onChange={(tab: CALLOUT_TABS) => {
-						callouts.tabs.tab = tab;
-					}}
-				/>
 				<div id="export-region" className="flex flex-col items-center">
-					<ColorBackground className="w-full flex justify-center">
-						<div ref={container} className="drop-shadow-xl">
-							<div className="flex justify-between relative z-10 h-0 top-3 pl-3">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="54"
-									height="14"
-									viewBox="0 0 54 14"
-								>
-									<g fill="none" fillRule="evenodd" transform="translate(1 1)">
-										<circle
-											cx="6"
-											cy="6"
-											r="6"
-											fill="#FF5F56"
-											stroke="#E0443E"
-											strokeWidth=".5"
-										></circle>
-										<circle
-											cx="26"
-											cy="6"
-											r="6"
-											fill="#FFBD2E"
-											stroke="#DEA123"
-											strokeWidth=".5"
-										></circle>
-										<circle
-											cx="46"
-											cy="6"
-											r="6"
-											fill="#27C93F"
-											stroke="#1AAB29"
-											strokeWidth=".5"
-										></circle>
-									</g>
-								</svg>
+					{/* <ColorBackground className="w-full flex justify-center"> */}
+					<div id="code-container" ref={container}>
+						<div className="flex flex-row justify-between relative z-10 h-0 top-3 pl-3 pr-3">
+							<div className="flex flex-row grow">
+								<CodeDropdown
+									options={CODE_MIRROR_MODES}
+									current={mode}
+									onChange={onModeChange}
+								/>
+								<CodeDropdown
+									options={CODE_MIRROR_THEMES}
+									current={theme}
+									onChange={onThemeSelect}
+								/>
+							</div>
+							<div className="flex flex-row">
+								<CodeButton>
+									Comment{" "}
+									<PencilIcon className="-mr-1 h-4 w-4" aria-hidden="true" />
+								</CodeButton>
 							</div>
 						</div>
-					</ColorBackground>
+					</div>
+					{/* </ColorBackground> */}
 					<OrderedListOfComments />
 				</div>
 			</ColorProvider>

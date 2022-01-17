@@ -106,7 +106,6 @@ export function CommentBox(props: CommentBoxProps) {
 					htmlFor="about"
 					className="font-inter-med block text-sm font-medium text-gray-700"
 				>
-					Callout{" "}
 					<i className="conum" data-value={props.comment.getDataValue()}></i>
 				</label>
 				<button

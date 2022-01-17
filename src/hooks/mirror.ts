@@ -14,9 +14,44 @@ export function useMirror() {
 	return context;
 }
 
-export function useMirrorTheme(
+export function useListenForCodeContainerHover(
 	mymirror: CodeMirror.Editor | undefined
-): [string, (t: string) => void] {
+) {
+	const [hovering, setHovering] = useState(false);
+	useEffect(() => {
+		if (!mymirror) {
+			return;
+		}
+
+		const codeContainer = document.getElementById("code-container");
+		if (!codeContainer) {
+			return;
+		}
+		const setIsHovering = () => {
+			if (!hovering) {
+				setHovering(true);
+			}
+		};
+
+		const setLeaving = () => {
+			if (hovering) {
+				setHovering(false);
+			}
+		};
+
+		codeContainer.addEventListener("mouseover", setIsHovering);
+		codeContainer.addEventListener("mouseleave", setLeaving);
+
+		return () => {
+			codeContainer.removeEventListener("mouseenter", setIsHovering);
+			codeContainer.removeEventListener("mouseleave", setLeaving);
+		};
+	}, [mymirror, hovering, setHovering]);
+
+	return hovering;
+}
+
+export function useMirrorTheme(mymirror: CodeMirror.Editor | undefined) {
 	const [theme, setTheme] = useState<string>(CODE_MIRROR_DEFAULTS.THEME);
 	const callouts = useCallouts();
 	const onThemeSelect = useCallback(
@@ -27,51 +62,12 @@ export function useMirrorTheme(
 
 			mymirror.setOption("theme", newtheme);
 			setTheme(newtheme);
-
-			const el = document.querySelector(".CodeMirror") as HTMLDivElement;
-			if (el) {
-				const s = window.getComputedStyle(el);
-
-				const rawRgbValues = s.backgroundColor
-					.split(",")
-					.map((s) => s.match(/\d/g))
-					.map((d) => Number(d?.join("")));
-
-				const rgbToHex = (r: number, g: number, b: number) =>
-					"#" +
-					[r, g, b]
-						.map((x) => {
-							const hex = x.toString(16);
-							return hex.length === 1 ? "0" + hex : hex;
-						})
-						.join("");
-				const hex = rgbToHex(rawRgbValues[0], rawRgbValues[1], rawRgbValues[2]);
-
-				const isLight = (hex: string) => {
-					const hexWithoutHashtag = hex.substring(1);
-					const rgbDecimal = parseInt(hexWithoutHashtag, 16);
-					const r = (rgbDecimal >> 16) & 0xff;
-					const g = (rgbDecimal >> 8) & 0xff;
-					const b = (rgbDecimal >> 0) & 0xff;
-
-					// ITU-R BT.709
-					// https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
-					const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-					return luma > 40;
-				};
-
-				if (isLight(hex)) {
-					callouts.comments.makeCommentsDark();
-				} else {
-					callouts.comments.makeCommentsBright();
-				}
-			}
+			callouts.textColorInverter.setIsLight();
 		},
-		[callouts.comments, mymirror]
+		[mymirror, callouts]
 	);
 
-	return [theme, onThemeSelect];
+	return { theme, onThemeSelect };
 }
 
 export function useMirrorMode(

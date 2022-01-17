@@ -5,7 +5,11 @@ module.exports = {
 		extend: {
 			colors: {
 				"baby-powder": "#f9fafb",
-				nightshade: "#111827",
+				powder: "#eaedf1",
+				nightshade: "#0A0E13",
+				shade: "#131a24",
+				"dawn-shade": "#1c2734",
+				"day-shade": "#243345",
 			},
 			fontFamily: {
 				"inter-med": ["InterMed", "sans-serif"],
