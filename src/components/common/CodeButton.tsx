@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
-import { useListenForCodeContainerHover, useMirror } from "../../hooks/mirror";
+import { useListenForCodeMirrorHover } from "../../hooks/mirror";
 import { classNames } from "../../util/classnames";
 import { FOCUS_RING_CLASS } from "../../util/constants";
 
@@ -13,10 +13,9 @@ interface CodeButtonProps {
 
 export const CODE_BUTTON_ACTIVE = "bg-orange-100";
 export function CodeButton(props: CodeButtonProps) {
-	const mirror = useMirror();
 	const callouts = useCallouts();
 	const [light, setIsLight] = useState(false);
-	const hovering = useListenForCodeContainerHover(mirror);
+	const hovering = useListenForCodeMirrorHover();
 
 	useEffect(() => {
 		const unsubscribe = callouts.onThemeUpdate((l) => setIsLight(l));
@@ -38,10 +37,10 @@ export function CodeButton(props: CodeButtonProps) {
 		>
 			<button
 				className={classNames(
-					`bg-gray-200 inline-flex justify-between items-center px-2 rounded-md text-xs font-inter-light text-gray-700 hover:bg-gray-50 ${FOCUS_RING_CLASS}`,
+					`inline-flex justify-between items-center px-2 rounded-md text-xs font-inter-light text-gray-700 hover:bg-gray-50 ${FOCUS_RING_CLASS}`,
 					light ? "" : "inverted",
 					"h-5",
-					props.className ? props.className : ""
+					props.className ? props.className : "bg-gray-200"
 				)}
 				onClick={props.onClick}
 			>

@@ -1,9 +1,11 @@
 import "./comments.css";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { Comment } from "../../hooks/callouts/comment";
-import { HelpText, Label, SmallText } from "../common/Font";
+import { SmallText } from "../common/Font";
 import { CALLOUT_MODE } from "../../util/constants";
+import { useRefHover } from "../../hooks/hover";
+import { Transition } from "@headlessui/react";
 
 function useCurrentCallouts() {
 	const callouts = useCallouts();
@@ -62,8 +64,8 @@ export function OrderedListOfComments() {
 			return null;
 		} else {
 			return (
-				<div className="shadow rounded-b-md bg-white p-10 w-full">
-					{tab !== CALLOUT_MODE.EXPORT && (
+				<div className="rounded-b-md bg-white w-full">
+					{/* {tab !== CALLOUT_MODE.EXPORT && (
 						<>
 							<Label
 								htmlFor=""
@@ -75,7 +77,7 @@ export function OrderedListOfComments() {
 								Describe what this code does. <i>Optional</i>
 							</SmallText>
 						</>
-					)}
+					)} */}
 					{comments}
 				</div>
 			);
@@ -91,6 +93,9 @@ interface CommentBoxProps {
 }
 
 export function CommentBox(props: CommentBoxProps) {
+	const commentControls = useRef<HTMLDivElement>(null);
+	const commentTextArea = useRef<HTMLTextAreaElement>(null);
+	const { hovering } = useRefHover(commentControls);
 	const callouts = useCallouts();
 	const updateComment = useCallback(
 		(content: string) => {
@@ -99,37 +104,59 @@ export function CommentBox(props: CommentBoxProps) {
 		[props.comment]
 	);
 
+	const resizeTextArea = useCallback(() => {
+		if (commentTextArea.current) {
+			commentTextArea.current.style.height = "1px";
+			commentTextArea.current.style.height =
+				5 + commentTextArea.current.scrollHeight + "px";
+		}
+	}, [commentTextArea]);
+
 	return (
-		<div className="mt-5">
-			<div className="flex flex-row justify-between">
+		<div className="mt-1 px-4 md:px-0 " ref={commentControls}>
+			<div className="flex flex-row justify-end w-full h-4">
+				<Transition
+					as={Fragment}
+					show={hovering === true}
+					enter="transition ease-out duration-100"
+					enterFrom="transform opacity-0"
+					enterTo="transform opacity-100"
+					leave="transition ease-in duration-75"
+					leaveFrom="transform opacity-100"
+					leaveTo="transform opacity-0"
+				>
+					<button
+						className="font-inter-light text-sm text-blue-700"
+						onClick={(e) => {
+							e.preventDefault();
+							callouts.comments.removeComment(props.comment);
+						}}
+					>
+						&#10005; Remove
+					</button>
+				</Transition>
+			</div>
+			<div className="mt-1 flex flex-row gap-x-2">
 				<label
 					htmlFor="about"
-					className="font-inter-med block text-sm font-medium text-gray-700"
+					className="font-inter-med block text-sm font-medium text-gray-700 mt-2"
 				>
 					<i className="conum" data-value={props.comment.getDataValue()}></i>
 				</label>
-				<button
-					className="font-inter-light text-sm text-blue-700"
-					onClick={(e) => {
-						e.preventDefault();
-						callouts.comments.removeComment(props.comment);
-					}}
-				>
-					&#10005; Remove
-				</button>
-			</div>
-			<div className="mt-1">
 				<textarea
 					id={props.comment.id}
 					name={props.comment.id}
+					ref={commentTextArea}
 					rows={3}
+					onKeyUp={() => {
+						resizeTextArea();
+					}}
 					onChange={(e) => updateComment(e.currentTarget.value)}
 					value={props.comment.content}
-					className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-inter-light p-2"
-					placeholder={""}
+					className="h-10 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md font-inter-light p-2 resize-none"
+					placeholder={"Brief description of this code"}
 				/>
 			</div>
-			<HelpText>Brief description of this code.</HelpText>
 		</div>
 	);
 }

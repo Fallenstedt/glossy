@@ -1,7 +1,6 @@
 import { PencilAltIcon, PencilIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
-import { useMirror } from "../../hooks/mirror";
 import { CALLOUT_MODE } from "../../util/constants";
 import { CodeButton, CODE_BUTTON_ACTIVE } from "../common/CodeButton";
 

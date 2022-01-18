@@ -3,6 +3,7 @@ import { CALLOUT_MODE, CODE_MIRROR_DEFAULTS } from "../util/constants";
 import { useCallouts } from "./callouts/callouts";
 import { Comment } from "../hooks/callouts/comment";
 import CodeMirror from "codemirror";
+import { useHover } from "./hover";
 
 export const MirrorContext = React.createContext<CodeMirror.Editor | undefined>(
 	undefined
@@ -14,39 +15,9 @@ export function useMirror() {
 	return context;
 }
 
-export function useListenForCodeContainerHover(
-	mymirror: CodeMirror.Editor | undefined
-) {
-	const [hovering, setHovering] = useState(false);
-	useEffect(() => {
-		if (!mymirror) {
-			return;
-		}
-
-		const codeContainer = document.getElementById("code-container");
-		if (!codeContainer) {
-			return;
-		}
-		const setIsHovering = () => {
-			if (!hovering) {
-				setHovering(true);
-			}
-		};
-
-		const setLeaving = () => {
-			if (hovering) {
-				setHovering(false);
-			}
-		};
-
-		codeContainer.addEventListener("mouseover", setIsHovering);
-		codeContainer.addEventListener("mouseleave", setLeaving);
-
-		return () => {
-			codeContainer.removeEventListener("mouseenter", setIsHovering);
-			codeContainer.removeEventListener("mouseleave", setLeaving);
-		};
-	}, [mymirror, hovering, setHovering]);
+export function useListenForCodeMirrorHover() {
+	const codeContainer = document.getElementById("code-container");
+	const { hovering } = useHover(codeContainer);
 
 	return hovering;
 }

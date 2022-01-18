@@ -141,8 +141,6 @@ import { OrderedListOfComments } from "../Comments/Comments";
 import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
 import { CodeDropdown } from "../common/CodeDropdown";
-import { CodeButton } from "../common/CodeButton";
-import { PencilIcon } from "@heroicons/react/solid";
 import { CodeCommentButton } from "../CodeCommentButton/CodeCommentButton";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
@@ -188,8 +186,8 @@ export function MyMirror() {
 			<ColorProvider value={color}>
 				<div id="export-region" className="flex flex-col items-center">
 					{/* <ColorBackground className="w-full flex justify-center"> */}
-					<div id="code-container" ref={container}>
-						<div className="flex flex-row justify-between relative z-10 h-0 top-3 pl-3 pr-3 gap-x-1">
+					<div id="code-container" ref={container} className="w-full">
+						<div className="flex flex-row justify-between items-baseline relative z-10 h-0 top-3 pl-3 pr-3 gap-x-1">
 							<div className="flex flex-row grow gap-x-1">
 								<CodeDropdown
 									options={CODE_MIRROR_MODES}

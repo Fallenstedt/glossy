@@ -47,7 +47,6 @@ class TextColorInverter {
 			// ITU-R BT.709
 			// https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
 			const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-			console.log(luma);
 			return luma > 60;
 		};
 		return { isLight, hex };

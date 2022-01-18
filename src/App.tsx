@@ -1,7 +1,5 @@
 import "./App.css";
 import { Container } from "./components/common/Container";
-import { H1, LargeText } from "./components/common/Font";
-import { Header } from "./components/Header/Header";
 import { MyMirror } from "./components/MyMirror/MyMirror";
 import { NavBar } from "./components/NavBar/NavBar";
 import {
@@ -14,10 +12,9 @@ function App() {
 
 	return (
 		<CalloutsProvider value={callouts}>
+			<NavBar />
 			<Container>
-				<Header>
-					<NavBar />
-				</Header>
+				{/* <Header></Header> */}
 				<MyMirror />
 			</Container>
 		</CalloutsProvider>

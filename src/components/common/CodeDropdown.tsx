@@ -1,8 +1,8 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
-import { useListenForCodeContainerHover, useMirror } from "../../hooks/mirror";
+import { useListenForCodeMirrorHover } from "../../hooks/mirror";
 import { classNames } from "../../util/classnames";
 import { FOCUS_RING_CLASS } from "../../util/constants";
 
@@ -14,8 +14,7 @@ export interface CodeDropDownProps {
 }
 
 export function CodeDropdown(props: CodeDropDownProps) {
-	const mirror = useMirror();
-	const hovering = useListenForCodeContainerHover(mirror);
+	const hovering = useListenForCodeMirrorHover();
 	const callouts = useCallouts();
 	const [light, setIsLight] = useState(false);
 
