@@ -1,12 +1,12 @@
-import { CALLOUT_TABS } from "../../util/constants";
+import { CALLOUT_MODE } from "../../util/constants";
 import { TabCallback } from "./types";
 
-export class Tabs {
-	private _tab = CALLOUT_TABS.PASTE_YOUR_CODE;
+export class Modes {
+	private _tab = CALLOUT_MODE.PASTE_YOUR_CODE;
 
 	constructor(private tabcallbacks: TabCallback[]) {}
 
-	public set tab(t: CALLOUT_TABS) {
+	public set tab(t: CALLOUT_MODE) {
 		this._tab = t;
 		this.tabcallbacks.forEach((cb) => cb(t));
 	}

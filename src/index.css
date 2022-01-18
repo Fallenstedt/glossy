@@ -14,11 +14,28 @@
 
 :root {
 	--baby-powder: #f9fafb;
+	--powder: #eaedf1;
+	--night-shade: #0a0e13;
+	--shade: #192339;
+	--dawn-shade: #202e4b;
+	--day-shade: #28395c;
+}
+
+.nightshade {
+	background-color: var(--night-shade);
+}
+
+.baby-powder {
+	background-color: var(--baby-powder);
+}
+
+.inverted {
+	filter: invert();
 }
 
 html,
 body {
-	background-color: var(--baby-powder);
+	transition: background-color ease-in 50ms;
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */

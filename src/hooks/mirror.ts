@@ -1,8 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { CALLOUT_TABS, CODE_MIRROR_DEFAULTS } from "../util/constants";
+import { CALLOUT_MODE, CODE_MIRROR_DEFAULTS } from "../util/constants";
 import { useCallouts } from "./callouts/callouts";
 import { Comment } from "../hooks/callouts/comment";
 import CodeMirror from "codemirror";
+import { useHover } from "./hover";
 
 export const MirrorContext = React.createContext<CodeMirror.Editor | undefined>(
 	undefined
@@ -14,9 +15,14 @@ export function useMirror() {
 	return context;
 }
 
-export function useMirrorTheme(
-	mymirror: CodeMirror.Editor | undefined
-): [string, (t: string) => void] {
+export function useListenForCodeMirrorHover() {
+	const codeContainer = document.getElementById("code-container");
+	const { hovering } = useHover(codeContainer);
+
+	return hovering;
+}
+
+export function useMirrorTheme(mymirror: CodeMirror.Editor | undefined) {
 	const [theme, setTheme] = useState<string>(CODE_MIRROR_DEFAULTS.THEME);
 	const callouts = useCallouts();
 	const onThemeSelect = useCallback(
@@ -27,51 +33,12 @@ export function useMirrorTheme(
 
 			mymirror.setOption("theme", newtheme);
 			setTheme(newtheme);
-
-			const el = document.querySelector(".CodeMirror") as HTMLDivElement;
-			if (el) {
-				const s = window.getComputedStyle(el);
-
-				const rawRgbValues = s.backgroundColor
-					.split(",")
-					.map((s) => s.match(/\d/g))
-					.map((d) => Number(d?.join("")));
-
-				const rgbToHex = (r: number, g: number, b: number) =>
-					"#" +
-					[r, g, b]
-						.map((x) => {
-							const hex = x.toString(16);
-							return hex.length === 1 ? "0" + hex : hex;
-						})
-						.join("");
-				const hex = rgbToHex(rawRgbValues[0], rawRgbValues[1], rawRgbValues[2]);
-
-				const isLight = (hex: string) => {
-					const hexWithoutHashtag = hex.substring(1);
-					const rgbDecimal = parseInt(hexWithoutHashtag, 16);
-					const r = (rgbDecimal >> 16) & 0xff;
-					const g = (rgbDecimal >> 8) & 0xff;
-					const b = (rgbDecimal >> 0) & 0xff;
-
-					// ITU-R BT.709
-					// https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
-					const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-					return luma > 40;
-				};
-
-				if (isLight(hex)) {
-					callouts.comments.makeCommentsDark();
-				} else {
-					callouts.comments.makeCommentsBright();
-				}
-			}
+			callouts.textColorInverter.setIsLight();
 		},
-		[callouts.comments, mymirror]
+		[mymirror, callouts]
 	);
 
-	return [theme, onThemeSelect];
+	return { theme, onThemeSelect };
 }
 
 export function useMirrorMode(
@@ -125,8 +92,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 		}
 
 		function removeLatestGhostOnTabChange() {
-			const removeGhost = (tab: CALLOUT_TABS) => {
-				if (tab !== CALLOUT_TABS.ANNOTATE) {
+			const removeGhost = (tab: CALLOUT_MODE) => {
+				if (tab !== CALLOUT_MODE.ANNOTATE) {
 					// remove the ghost comment if there is one
 					const latest = callouts.comments.latestComment();
 					if (latest && latest.ghost === true) {
@@ -141,8 +108,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 
 		function moveGhostOnMouseMove(mymirror: CodeMirror.Editor) {
 			const onMouseMove = (e: MouseEvent) => {
-				const tab = callouts.tabs.tab;
-				if (tab !== CALLOUT_TABS.ANNOTATE) {
+				const tab = callouts.modes.tab;
+				if (tab !== CALLOUT_MODE.ANNOTATE) {
 					// remove the ghost comment if there is one
 					const latest = callouts.comments.latestComment();
 					if (latest && latest.ghost === true) {
@@ -204,8 +171,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 export function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
 	const callouts = useCallouts();
 	useEffect(() => {
-		const toggleReadOnly = (currenttab: CALLOUT_TABS) => {
-			if (currenttab === CALLOUT_TABS.PASTE_YOUR_CODE) {
+		const toggleReadOnly = (currenttab: CALLOUT_MODE) => {
+			if (currenttab === CALLOUT_MODE.PASTE_YOUR_CODE) {
 				mymirror?.setOption("readOnly", false);
 				mymirror?.setOption("cursorBlinkRate", 530);
 			} else {
@@ -241,7 +208,7 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			callouts.comments.refreshComments();
 		};
 		const cursorActivity = (e: CodeMirror.Editor) => {
-			if (callouts.tabs.tab !== CALLOUT_TABS.ANNOTATE) {
+			if (callouts.modes.tab !== CALLOUT_MODE.ANNOTATE) {
 				return;
 			}
 			// Click event

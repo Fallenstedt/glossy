@@ -2,13 +2,13 @@ import { SketchPicker } from "react-color";
 import { useRef, useState } from "react";
 import { Label } from "../common/Font";
 import { useColor } from "../../hooks/color";
-import { useOutsideAlerter } from "../../hooks/outside-click";
+import { useOutsideClick } from "../../hooks/outside-click";
 
 export function ColorPick() {
 	const wrapper = useRef(null);
 	const { color, setColor } = useColor();
 	const [open, setOpen] = useState(false);
-	useOutsideAlerter(wrapper, () => {
+	useOutsideClick(wrapper, () => {
 		setOpen(false);
 	});
 

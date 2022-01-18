@@ -2,11 +2,13 @@
 	height: auto;
 	font-size: 16px;
 	border-radius: 5px;
-	padding: 10px;
-	padding-top: 30px;
+	padding: 30px;
+}
+
+/* .fit-content {
 	min-width: 200px;
 	display: inline-block;
-}
+} */
 
 .annotated-text {
 	background-color: rgba(255, 255, 0, 0.1);
