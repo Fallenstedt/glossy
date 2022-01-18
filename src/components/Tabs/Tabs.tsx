@@ -7,7 +7,7 @@ import { useCallouts } from "../../hooks/callouts/callouts";
 import {
 	CODE_MIRROR_MODES,
 	CODE_MIRROR_THEMES,
-	CALLOUT_TABS,
+	CALLOUT_MODE,
 } from "../../util/constants";
 import { Label, SmallText } from "../common/Font";
 import { ModeSelect } from "../ModeSelect/ModeSelect";
@@ -153,16 +153,16 @@ function RenderExport() {
 
 export function Tabs(props: TabsProps) {
 	const [steps] = useState([
-		CALLOUT_TABS.PASTE_YOUR_CODE,
-		CALLOUT_TABS.ANNOTATE,
-		CALLOUT_TABS.EXPORT,
+		CALLOUT_MODE.PASTE_YOUR_CODE,
+		CALLOUT_MODE.ANNOTATE,
+		CALLOUT_MODE.EXPORT,
 	]);
 
 	return (
 		<div className="shadow rounded-t-md bg-white dark:bg-dawn-shade px-10 pt-5 mt-10">
 			<Tab.Group
 				onChange={(i: number) =>
-					props.onChange(steps[i] ?? CALLOUT_TABS.UNKNOWN)
+					props.onChange(steps[i] ?? CALLOUT_MODE.UNKNOWN)
 				}
 			>
 				<Tab.List className="flex flex-col md:flex-row p-1 space-x-1 bg-zinc-300/20 dark:bg-shade rounded-xl mb-2">

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { CALLOUT_TABS, CODE_MIRROR_DEFAULTS } from "../util/constants";
+import { CALLOUT_MODE, CODE_MIRROR_DEFAULTS } from "../util/constants";
 import { useCallouts } from "./callouts/callouts";
 import { Comment } from "../hooks/callouts/comment";
 import CodeMirror from "codemirror";
@@ -121,8 +121,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 		}
 
 		function removeLatestGhostOnTabChange() {
-			const removeGhost = (tab: CALLOUT_TABS) => {
-				if (tab !== CALLOUT_TABS.ANNOTATE) {
+			const removeGhost = (tab: CALLOUT_MODE) => {
+				if (tab !== CALLOUT_MODE.ANNOTATE) {
 					// remove the ghost comment if there is one
 					const latest = callouts.comments.latestComment();
 					if (latest && latest.ghost === true) {
@@ -137,8 +137,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 
 		function moveGhostOnMouseMove(mymirror: CodeMirror.Editor) {
 			const onMouseMove = (e: MouseEvent) => {
-				const tab = callouts.tabs.tab;
-				if (tab !== CALLOUT_TABS.ANNOTATE) {
+				const tab = callouts.modes.tab;
+				if (tab !== CALLOUT_MODE.ANNOTATE) {
 					// remove the ghost comment if there is one
 					const latest = callouts.comments.latestComment();
 					if (latest && latest.ghost === true) {
@@ -200,8 +200,8 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 export function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
 	const callouts = useCallouts();
 	useEffect(() => {
-		const toggleReadOnly = (currenttab: CALLOUT_TABS) => {
-			if (currenttab === CALLOUT_TABS.PASTE_YOUR_CODE) {
+		const toggleReadOnly = (currenttab: CALLOUT_MODE) => {
+			if (currenttab === CALLOUT_MODE.PASTE_YOUR_CODE) {
 				mymirror?.setOption("readOnly", false);
 				mymirror?.setOption("cursorBlinkRate", 530);
 			} else {
@@ -237,7 +237,7 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			callouts.comments.refreshComments();
 		};
 		const cursorActivity = (e: CodeMirror.Editor) => {
-			if (callouts.tabs.tab !== CALLOUT_TABS.ANNOTATE) {
+			if (callouts.modes.tab !== CALLOUT_MODE.ANNOTATE) {
 				return;
 			}
 			// Click event

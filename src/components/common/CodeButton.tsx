@@ -7,7 +7,11 @@ import { FOCUS_RING_CLASS } from "../../util/constants";
 
 interface CodeButtonProps {
 	children: React.ReactNode;
+	onClick: () => void;
+	className?: string;
 }
+
+export const CODE_BUTTON_ACTIVE = "bg-orange-100";
 export function CodeButton(props: CodeButtonProps) {
 	const mirror = useMirror();
 	const callouts = useCallouts();
@@ -34,10 +38,12 @@ export function CodeButton(props: CodeButtonProps) {
 		>
 			<button
 				className={classNames(
-					`inline-flex justify-between items-center px-2 rounded-md text-xs font-inter-light text-gray-700 hover:bg-gray-50 ${FOCUS_RING_CLASS}`,
+					`bg-gray-200 inline-flex justify-between items-center px-2 rounded-md text-xs font-inter-light text-gray-700 hover:bg-gray-50 ${FOCUS_RING_CLASS}`,
 					light ? "" : "inverted",
-					"h-5"
+					"h-5",
+					props.className ? props.className : ""
 				)}
+				onClick={props.onClick}
 			>
 				{props.children}
 			</button>

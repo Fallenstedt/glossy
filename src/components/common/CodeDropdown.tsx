@@ -41,7 +41,7 @@ export function CodeDropdown(props: CodeDropDownProps) {
 				<Menu as="div" className="relative inline-block text-left z-20">
 					<Menu.Button
 						className={classNames(
-							`inline-flex justify-between items-center w-full px-2 rounded-md text-xs font-inter-light text-gray-700 hover:bg-gray-50 ${FOCUS_RING_CLASS}`,
+							`bg-gray-200 inline-flex justify-between items-center w-full px-2 rounded-md text-xs font-inter-light text-gray-700 hover:bg-gray-50 ${FOCUS_RING_CLASS}`,
 							light ? "" : "inverted"
 						)}
 					>
@@ -58,7 +58,7 @@ export function CodeDropdown(props: CodeDropDownProps) {
 						leaveTo="transform opacity-0 scale-95"
 					>
 						<Menu.Items
-							className="font-inter-light origin-top absolute left-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+							className="font-inter-light origin-top absolute left-0 mt-2 w-full sm:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							style={{
 								maxHeight: "400px",
 								overflowY: "scroll",

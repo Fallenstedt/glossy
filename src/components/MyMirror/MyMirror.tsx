@@ -143,6 +143,7 @@ import { ColorProvider, useInitializeColor } from "../../hooks/color";
 import { CodeDropdown } from "../common/CodeDropdown";
 import { CodeButton } from "../common/CodeButton";
 import { PencilIcon } from "@heroicons/react/solid";
+import { CodeCommentButton } from "../CodeCommentButton/CodeCommentButton";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -175,7 +176,7 @@ export function MyMirror() {
 	const container = useRef<HTMLDivElement>(null);
 
 	const mymirror = useInitializeMyMirror(container);
-	const [mode, onModeChange] = useMirrorMode(mymirror);
+	const [mirrorMode, onModeChange] = useMirrorMode(mymirror);
 	const { theme, onThemeSelect } = useMirrorTheme(mymirror);
 
 	useGhost(mymirror);
@@ -188,11 +189,11 @@ export function MyMirror() {
 				<div id="export-region" className="flex flex-col items-center">
 					{/* <ColorBackground className="w-full flex justify-center"> */}
 					<div id="code-container" ref={container}>
-						<div className="flex flex-row justify-between relative z-10 h-0 top-3 pl-3 pr-3">
-							<div className="flex flex-row grow">
+						<div className="flex flex-row justify-between relative z-10 h-0 top-3 pl-3 pr-3 gap-x-1">
+							<div className="flex flex-row grow gap-x-1">
 								<CodeDropdown
 									options={CODE_MIRROR_MODES}
-									current={mode}
+									current={mirrorMode}
 									onChange={onModeChange}
 								/>
 								<CodeDropdown
@@ -202,10 +203,7 @@ export function MyMirror() {
 								/>
 							</div>
 							<div className="flex flex-row">
-								<CodeButton>
-									Comment{" "}
-									<PencilIcon className="-mr-1 h-4 w-4" aria-hidden="true" />
-								</CodeButton>
+								<CodeCommentButton />
 							</div>
 						</div>
 					</div>

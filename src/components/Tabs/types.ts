@@ -1,5 +1,5 @@
-import { CALLOUT_TABS } from "../../util/constants";
+import { CALLOUT_MODE } from "../../util/constants";
 
 export interface TabsProps {
-	onChange: (step: CALLOUT_TABS) => void;
+	onChange: (step: CALLOUT_MODE) => void;
 }

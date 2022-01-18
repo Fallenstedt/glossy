@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-export function useOutsideAlerter(
+export function useOutsideClick(
 	ref: React.MutableRefObject<any>,
 	onOutsideClick: () => void
 ) {

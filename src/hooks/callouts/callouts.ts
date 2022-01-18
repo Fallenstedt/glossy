@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useEffect } from "react";
 import { Comments } from "./comments";
-import { Tabs } from "./tab";
+import { Modes } from "./tab";
 import { CommentCallback, TabCallback, ThemeUpdateCallback } from "./types";
 
 class TextColorInverter {
@@ -47,8 +47,8 @@ class TextColorInverter {
 			// ITU-R BT.709
 			// https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
 			const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-			return luma > 40;
+			console.log(luma);
+			return luma > 60;
 		};
 		return { isLight, hex };
 	}
@@ -60,7 +60,7 @@ class Callouts {
 	private readonly themeUpdateCallbacks: ThemeUpdateCallback[] = [];
 
 	public readonly comments = new Comments(this.commentCallbacks);
-	public readonly tabs = new Tabs(this.tabCallbacks);
+	public readonly modes = new Modes(this.tabCallbacks);
 	public readonly textColorInverter = new TextColorInverter(
 		this.themeUpdateCallbacks
 	);
@@ -91,7 +91,7 @@ class Callouts {
 
 	public onTabUpdate(callback: TabCallback) {
 		this.tabCallbacks.push(callback);
-		callback(this.tabs.tab);
+		callback(this.modes.tab);
 
 		return () => {
 			const i = this.tabCallbacks.indexOf(callback);

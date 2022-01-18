@@ -1,9 +1,9 @@
 import "./App.css";
 import { Container } from "./components/common/Container";
 import { H1, LargeText } from "./components/common/Font";
-import { DarkModeButton } from "./components/DarkModeButton/DarkModeButton";
 import { Header } from "./components/Header/Header";
 import { MyMirror } from "./components/MyMirror/MyMirror";
+import { NavBar } from "./components/NavBar/NavBar";
 import {
 	CalloutsProvider,
 	useInitializeCallouts,
@@ -14,11 +14,9 @@ function App() {
 
 	return (
 		<CalloutsProvider value={callouts}>
-			<DarkModeButton />
 			<Container>
 				<Header>
-					<H1>Glossy</H1>
-					<LargeText>Document and prettify your source code.</LargeText>
+					<NavBar />
 				</Header>
 				<MyMirror />
 			</Container>

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { Comment } from "../../hooks/callouts/comment";
 import { HelpText, Label, SmallText } from "../common/Font";
-import { CALLOUT_TABS } from "../../util/constants";
+import { CALLOUT_MODE } from "../../util/constants";
 
 function useCurrentCallouts() {
 	const callouts = useCallouts();
@@ -20,7 +20,7 @@ function useCurrentCallouts() {
 
 function useCurrentTab() {
 	const callouts = useCallouts();
-	const [tab, setTab] = useState(callouts.tabs.tab);
+	const [tab, setTab] = useState(callouts.modes.tab);
 	useEffect(() => {
 		const unsubscribe = callouts.onTabUpdate((t) => setTab(t));
 
@@ -37,7 +37,7 @@ export function OrderedListOfComments() {
 	const comments = currentComments
 		.filter((comment) => comment.ghost === false)
 		.map((comment) => {
-			if (tab === CALLOUT_TABS.EXPORT) {
+			if (tab === CALLOUT_MODE.EXPORT) {
 				return (
 					<div className="flex flex-row items-start py-2" key={comment.id}>
 						<div className="pt-1">
@@ -57,13 +57,13 @@ export function OrderedListOfComments() {
 	if (comments.length) {
 		if (
 			currentComments.every((comment) => comment.content.length === 0) &&
-			tab === CALLOUT_TABS.EXPORT
+			tab === CALLOUT_MODE.EXPORT
 		) {
 			return null;
 		} else {
 			return (
 				<div className="shadow rounded-b-md bg-white p-10 w-full">
-					{tab !== CALLOUT_TABS.EXPORT && (
+					{tab !== CALLOUT_MODE.EXPORT && (
 						<>
 							<Label
 								htmlFor=""
