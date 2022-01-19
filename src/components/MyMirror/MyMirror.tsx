@@ -127,6 +127,7 @@ import {
 	MirrorProvider,
 	useAddComment,
 	useGhost,
+	useInitializeComments,
 	useMirrorMode,
 	useMirrorTheme,
 	useSetReadOnly,
@@ -142,6 +143,7 @@ import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
 import { CodeDropdown } from "../common/CodeDropdown";
 import { CodeCommentButton } from "../CodeCommentButton/CodeCommentButton";
+import { H1 } from "../common/Font";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -177,6 +179,7 @@ export function MyMirror() {
 	const [mirrorMode, onModeChange] = useMirrorMode(mymirror);
 	const { theme, onThemeSelect } = useMirrorTheme(mymirror);
 
+	useInitializeComments(mymirror);
 	useGhost(mymirror);
 	useAddComment(mymirror);
 	useSetReadOnly(mymirror);
@@ -185,7 +188,9 @@ export function MyMirror() {
 		<MirrorProvider value={mymirror}>
 			<ColorProvider value={color}>
 				<div id="export-region" className="flex flex-col items-center">
-					{/* <ColorBackground className="w-full flex justify-center"> */}
+					<div className="w-full">
+						<H1 contenteditable>Glossy helps you document your code</H1>
+					</div>
 					<div id="code-container" ref={container} className="w-full">
 						<div className="flex flex-row justify-between items-baseline relative z-10 h-0 top-3 pl-3 pr-3 gap-x-1">
 							<div className="flex flex-row grow gap-x-1">
@@ -205,7 +210,6 @@ export function MyMirror() {
 							</div>
 						</div>
 					</div>
-					{/* </ColorBackground> */}
 					<OrderedListOfComments />
 				</div>
 			</ColorProvider>

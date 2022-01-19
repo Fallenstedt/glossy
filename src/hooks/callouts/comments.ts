@@ -86,6 +86,12 @@ export class Comments {
 		this.darkTheme = true;
 	}
 
+	public removeAllComments() {
+		for (let i = 0; i < this.comments.length; i++) {
+			this.comments[i].delete();
+		}
+	}
+
 	private createCallout(num: number) {
 		const el = document.createElement("i");
 		el.className = `conum conum-ghost ${this.darkTheme ? "invert" : ""}`;

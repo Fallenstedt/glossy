@@ -1,8 +1,15 @@
 import React from "react";
 
-export function H1(props: { children: React.ReactNode }) {
+export function H1(props: {
+	children: React.ReactNode;
+	contenteditable?: boolean;
+}) {
 	return (
-		<h1 className="font-inter-med text-4xl font-bold leading-7 text-gray-900 dark:text-baby-powder sm:text-3xl">
+		<h1
+			suppressContentEditableWarning={true}
+			contentEditable={props.contenteditable ?? false}
+			className="font-inter-med text-4xl font-bold leading-7 text-gray-900 dark:text-baby-powder sm:text-3xl"
+		>
 			{props.children}
 		</h1>
 	);

@@ -63,24 +63,7 @@ export function OrderedListOfComments() {
 		) {
 			return null;
 		} else {
-			return (
-				<div className="rounded-b-md bg-white w-full">
-					{/* {tab !== CALLOUT_MODE.EXPORT && (
-						<>
-							<Label
-								htmlFor=""
-								className="block text-sm font-medium text-gray-700"
-							>
-								Document Your Code
-							</Label>
-							<SmallText>
-								Describe what this code does. <i>Optional</i>
-							</SmallText>
-						</>
-					)} */}
-					{comments}
-				</div>
-			);
+			return <div className="rounded-b-md bg-white w-full">{comments}</div>;
 		}
 	} else {
 		return null;

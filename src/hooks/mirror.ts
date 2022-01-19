@@ -66,6 +66,52 @@ export function useMirrorMode(
 	return [mode, onModeSelect];
 }
 
+export function useInitializeComments(mymirror: CodeMirror.Editor | undefined) {
+	const callouts = useCallouts();
+
+	useEffect(() => {
+		if (!mymirror) {
+			return;
+		}
+
+		const addCommentOnLine = (args: {
+			linenumber: number;
+			content: string;
+		}) => {
+			const doc = mymirror.getDoc();
+			const line = doc.getLine(args.linenumber);
+			const comment = callouts.comments.addComment();
+			if (!comment) {
+				return;
+			}
+			const bookmark = doc.setBookmark(
+				CodeMirror.Pos(args.linenumber, line.length),
+				{
+					widget: comment.callout,
+				}
+			);
+			comment.content = args.content;
+			comment.bookmark = bookmark;
+			comment.ghost = false;
+		};
+
+		addCommentOnLine({
+			linenumber: 0,
+			content:
+				"This app provide a means to add annotations to lines of code in a verbatim block.",
+		});
+
+		addCommentOnLine({
+			linenumber: 2,
+			content: "You can modify the comments and the code above.",
+		});
+		addCommentOnLine({
+			linenumber: 12,
+			content: "Then export this as markdown for your next blog post.",
+		});
+	}, [callouts.comments, mymirror]);
+}
+
 export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 	const callouts = useCallouts();
 
@@ -205,6 +251,12 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			movedByMouse = false;
 		};
 		const keyup = () => {
+			// did the user just nuke the document?
+			const linecount = mymirror.getDoc().lineCount();
+			if (linecount === 1 && mymirror.getLine(0) === "") {
+				callouts.comments.removeAllComments();
+			}
+
 			callouts.comments.refreshComments();
 		};
 		const cursorActivity = (e: CodeMirror.Editor) => {
