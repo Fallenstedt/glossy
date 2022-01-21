@@ -187,7 +187,10 @@ export function MyMirror() {
 	return (
 		<MirrorProvider value={mymirror}>
 			<ColorProvider value={color}>
-				<div id="export-region" className="flex flex-col items-center">
+				<div
+					id="export-region"
+					className="flex flex-col items-center bg-white p-8"
+				>
 					<div className="w-full">
 						<H1 contenteditable>Glossy helps you document your code</H1>
 					</div>

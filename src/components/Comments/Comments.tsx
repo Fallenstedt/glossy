@@ -6,6 +6,7 @@ import { SmallText } from "../common/Font";
 import { CALLOUT_MODE } from "../../util/constants";
 import { useRefHover } from "../../hooks/hover";
 import { Transition } from "@headlessui/react";
+import { TinyButton } from "../common/TInyButton";
 
 function useCurrentCallouts() {
 	const callouts = useCallouts();
@@ -63,7 +64,7 @@ export function OrderedListOfComments() {
 		) {
 			return null;
 		} else {
-			return <div className="rounded-b-md bg-white w-full">{comments}</div>;
+			return <div className="rounded-b-md w-full">{comments}</div>;
 		}
 	} else {
 		return null;
@@ -97,9 +98,8 @@ export function CommentBox(props: CommentBoxProps) {
 
 	return (
 		<div className="mt-1 px-4 md:px-0 " ref={commentControls}>
-			<div className="flex flex-row justify-end w-full h-4">
+			<div className="flex flex-row justify-end w-full h-4 mb-4">
 				<Transition
-					as={Fragment}
 					show={hovering === true}
 					enter="transition ease-out duration-100"
 					enterFrom="transform opacity-0"
@@ -108,15 +108,14 @@ export function CommentBox(props: CommentBoxProps) {
 					leaveFrom="transform opacity-100"
 					leaveTo="transform opacity-0"
 				>
-					<button
-						className="font-inter-light text-sm text-blue-700"
-						onClick={(e) => {
-							e.preventDefault();
+					<TinyButton
+						className="bg-gray-200"
+						onClick={() => {
 							callouts.comments.removeComment(props.comment);
 						}}
 					>
 						&#10005; Remove
-					</button>
+					</TinyButton>
 				</Transition>
 			</div>
 			<div className="mt-1 flex flex-row gap-x-2">

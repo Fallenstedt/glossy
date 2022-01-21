@@ -26,7 +26,7 @@ export function CodeCommentButton() {
 						? CALLOUT_MODE.PASTE_YOUR_CODE
 						: CALLOUT_MODE.ANNOTATE;
 			}}
-			className={active ? CODE_BUTTON_ACTIVE : ""}
+			className={active ? CODE_BUTTON_ACTIVE : "bg-gray-200"}
 		>
 			Comment{" "}
 			{active ? (
