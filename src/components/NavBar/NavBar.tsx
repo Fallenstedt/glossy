@@ -9,6 +9,7 @@ interface NavBarProps {}
 export function NavBar(props: NavBarProps) {
 	const [loading, setLoading] = useState(false);
 	const callouts = useCallouts();
+	console.log(loading);
 
 	const exportImage = useCallback(() => {
 		const region = document.getElementById("export-region");

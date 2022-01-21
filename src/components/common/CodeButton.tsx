@@ -1,9 +1,7 @@
 import { Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { useListenForCodeMirrorHover } from "../../hooks/mirror";
-import { classNames } from "../../util/classnames";
-import { FOCUS_RING_CLASS } from "../../util/constants";
 import { TinyButton } from "./TInyButton";
 
 interface CodeButtonProps {
