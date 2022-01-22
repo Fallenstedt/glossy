@@ -1,7 +1,9 @@
+import { ExternalLinkIcon } from "@heroicons/react/solid";
 import download from "downloadjs";
 import { toPng } from "html-to-image";
 import { useCallback, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
+import { Link } from "../common/Button";
 import { DropDown } from "../common/DropDown";
 
 interface NavBarProps {}
@@ -14,7 +16,6 @@ export function NavBar(props: NavBarProps) {
 	const exportImage = useCallback(() => {
 		const region = document.getElementById("export-region");
 		if (!region) {
-			alert("Something went wrong. Devs have been notified");
 			return;
 		}
 
@@ -40,8 +41,10 @@ export function NavBar(props: NavBarProps) {
 			});
 	}, [callouts.comments]);
 
+	// const exportMarkdown = useCallback(() => {})
+
 	return (
-		<nav className="flex flex-row justify-between gap-x-4 my-4 mx-4 md:mt-4 md:mb-32">
+		<nav className="flex flex-row justify-between gap-x-4 my-4 mx-4 md:mt-4 md:mb-8">
 			<div className="h-8">
 				<img
 					className="object-cover h-8"
@@ -49,17 +52,24 @@ export function NavBar(props: NavBarProps) {
 					alt="Glossy logo"
 				/>
 			</div>
-
-			<DropDown
-				title=""
-				current="Export"
-				options={["PNG", "Markdown"]}
-				onChange={(t) => {
-					if (t === "PNG") {
-						exportImage();
-					}
-				}}
-			/>
+			<div className="flex flex-row gap-x-1">
+				<Link link="https://docs.google.com/forms/d/e/1FAIpQLSe5Z4xZ3-1JSQDPK4Mhp0IObPJniERuVqug-jFXf95K91wXJQ/viewform?usp=pp_url">
+					<div className="flex justify-center items-center">
+						Feedback
+						<ExternalLinkIcon className="h-4 ml-2" />
+					</div>
+				</Link>
+				<DropDown
+					title=""
+					current="Export"
+					options={["PNG", "Markdown"]}
+					onChange={(t) => {
+						if (t === "PNG") {
+							exportImage();
+						}
+					}}
+				/>
+			</div>
 		</nav>
 	);
 }
