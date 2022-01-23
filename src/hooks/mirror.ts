@@ -141,7 +141,7 @@ export function useInitializeComments(mymirror: CodeMirror.Editor | undefined) {
 
 		addCommentOnLine({
 			linenumber: 2,
-			content: "You can modify the comments and the code above.",
+			content: "You can modify the comments in the code above.",
 		});
 		addCommentOnLine({
 			linenumber: 12,

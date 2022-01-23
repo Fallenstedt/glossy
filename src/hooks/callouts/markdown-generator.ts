@@ -26,6 +26,26 @@ export class MirrorContent {
 		const mirrorContent = this.getMirrorValueFn?.() ?? "";
 		const comments = this.getCommentsFn?.() ?? [];
 
-		console.log({ title, mirrorContent, comments });
+		const content = `
+## ${title}
+
+\`\`\`
+${mirrorContent}
+\`\`\`
+
+${comments
+	.map((comment, i) => {
+		return `${i + 1}. ${comment}`;
+	})
+	.join("\n")}
+`;
+
+		var type = "text/plain";
+		var blob = new Blob([content], { type });
+		var data = [new ClipboardItem({ [type]: blob })];
+
+		navigator.clipboard.write(data);
+
+		console.log({ title, mirrorContent, comments, content });
 	}
 }
