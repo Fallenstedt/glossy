@@ -41,8 +41,6 @@ export function NavBar(props: NavBarProps) {
 			});
 	}, [callouts.comments]);
 
-	// const exportMarkdown = useCallback(() => {})
-
 	return (
 		<nav className="flex flex-row justify-between gap-x-4 my-4 mx-4 md:mt-4 md:mb-8">
 			<div className="h-8">
@@ -64,8 +62,15 @@ export function NavBar(props: NavBarProps) {
 					current="Export"
 					options={["PNG", "Markdown"]}
 					onChange={(t) => {
-						if (t === "PNG") {
-							exportImage();
+						switch (t) {
+							case "PNG":
+								exportImage();
+								break;
+							case "Markdown":
+								callouts.mirrorContent.export();
+								break;
+							default:
+								break;
 						}
 					}}
 				/>

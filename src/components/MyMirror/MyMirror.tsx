@@ -127,7 +127,9 @@ import {
 	MirrorProvider,
 	useAddComment,
 	useGhost,
+	useInitializeCalloutsMirrorListener,
 	useInitializeComments,
+	useInitializeTitleListener,
 	useMirrorMode,
 	useMirrorTheme,
 	useSetReadOnly,
@@ -143,7 +145,8 @@ import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
 import { CodeDropdown } from "../common/CodeDropdown";
 import { CodeCommentButton } from "../CodeCommentButton/CodeCommentButton";
-import { H1 } from "../common/Font";
+import { FancyButton, H1 } from "../common/Font";
+import { useCallouts } from "../../hooks/callouts/callouts";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(
@@ -174,14 +177,22 @@ function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 export function MyMirror() {
 	const color = useInitializeColor();
 	const container = useRef<HTMLDivElement>(null);
+	const title = useRef<HTMLElement>(null);
 
 	const mymirror = useInitializeMyMirror(container);
 	const [mirrorMode, onModeChange] = useMirrorMode(mymirror);
 	const { theme, onThemeSelect } = useMirrorTheme(mymirror);
 
+	// title
+	useInitializeTitleListener(title);
+
+	// comments
 	useInitializeComments(mymirror);
-	useGhost(mymirror);
 	useAddComment(mymirror);
+
+	// mirror
+	useInitializeCalloutsMirrorListener(mymirror);
+	useGhost(mymirror);
 	useSetReadOnly(mymirror);
 
 	return (
@@ -192,7 +203,9 @@ export function MyMirror() {
 					className="flex flex-col items-center bg-white p-8"
 				>
 					<div className="w-full">
-						<H1 contenteditable>Glossy helps you document your code</H1>
+						<H1 contenteditable ref={title}>
+							Glossy helps you document your code
+						</H1>
 					</div>
 					<div id="code-container" ref={container} className="w-full">
 						<div className="flex flex-row justify-between items-baseline relative z-10 h-0 top-3 pl-3 pr-3 gap-x-1">

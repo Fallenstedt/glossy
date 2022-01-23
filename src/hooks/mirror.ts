@@ -15,6 +15,44 @@ export function useMirror() {
 	return context;
 }
 
+export function useInitializeTitleListener(
+	title: React.RefObject<HTMLElement>
+) {
+	const callouts = useCallouts();
+
+	useEffect(() => {
+		if (!title.current) {
+			return;
+		}
+
+		const unsubscribe = callouts.mirrorContent.titleFn(
+			() => title.current?.textContent ?? ""
+		);
+		return () => {
+			unsubscribe();
+		};
+	}, [callouts.mirrorContent, title]);
+}
+
+export function useInitializeCalloutsMirrorListener(
+	mymirror: CodeMirror.Editor | undefined
+) {
+	const callouts = useCallouts();
+
+	useEffect(() => {
+		if (!mymirror) {
+			return;
+		}
+
+		const unsubscribe = callouts.mirrorContent.mirrorValueFn(() =>
+			mymirror.getValue()
+		);
+		return () => {
+			unsubscribe();
+		};
+	}, [callouts.mirrorContent, mymirror]);
+}
+
 export function useListenForCodeMirrorHover() {
 	const codeContainer = document.getElementById("code-container");
 	const { hovering } = useHover(codeContainer);
@@ -256,7 +294,7 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			if (linecount === 1 && mymirror.getLine(0) === "") {
 				callouts.comments.removeAllComments();
 			}
-
+			// refresh comments
 			callouts.comments.refreshComments();
 		};
 		const cursorActivity = (e: CodeMirror.Editor) => {

@@ -1,19 +1,21 @@
 import React from "react";
 
-export function H1(props: {
-	children: React.ReactNode;
-	contenteditable?: boolean;
-}) {
-	return (
-		<h1
-			suppressContentEditableWarning={true}
-			contentEditable={props.contenteditable ?? false}
-			className="font-inter-med text-4xl font-bold leading-7 text-gray-900 dark:text-baby-powder sm:text-3xl"
-		>
-			{props.children}
-		</h1>
-	);
-}
+export const H1 = React.forwardRef((props: any, ref: any) => (
+	<h1
+		ref={ref}
+		suppressContentEditableWarning={true}
+		contentEditable={props.contenteditable ?? false}
+		className="font-inter-med text-4xl font-bold leading-7 text-gray-900 dark:text-baby-powder sm:text-3xl"
+	>
+		{props.children}
+	</h1>
+));
+
+export const FancyButton = React.forwardRef((props: any, ref: any) => (
+	<button ref={ref as any} className="FancyButton">
+		{props.children}
+	</button>
+));
 
 export function H2(props: { children: React.ReactNode }) {
 	<h2 className="font-inter-med block text-sm font-medium text-gray-700">
