@@ -145,8 +145,7 @@ import "./my-mirror.css";
 import { ColorProvider, useInitializeColor } from "../../hooks/color";
 import { CodeDropdown } from "../common/CodeDropdown";
 import { CodeCommentButton } from "../CodeCommentButton/CodeCommentButton";
-import { FancyButton, H1 } from "../common/Font";
-import { useCallouts } from "../../hooks/callouts/callouts";
+import { H1 } from "../common/Font";
 
 function useInitializeMyMirror(container: React.RefObject<HTMLDivElement>) {
 	const [myMirror, setMyMirror] = useState<CodeMirror.Editor | undefined>(

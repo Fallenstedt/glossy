@@ -3,6 +3,18 @@ import { CommentCallback } from "./types";
 
 export class Comments {
 	public static max = 10;
+	public static enclosedAlphanumeric = [
+		"\u2460",
+		"\u2461",
+		"\u2462",
+		"\u2463",
+		"\u2464",
+		"\u2465",
+		"\u2466",
+		"\u2467",
+		"\u2468",
+		"\u2469",
+	];
 
 	constructor(private readonly callbacks: CommentCallback[]) {}
 

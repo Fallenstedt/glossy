@@ -4,6 +4,7 @@ import { useCallouts } from "./callouts/callouts";
 import { Comment } from "../hooks/callouts/comment";
 import CodeMirror from "codemirror";
 import { useHover } from "./hover";
+import { Comments } from "./callouts/comments";
 
 export const MirrorContext = React.createContext<CodeMirror.Editor | undefined>(
 	undefined
@@ -44,9 +45,19 @@ export function useInitializeCalloutsMirrorListener(
 			return;
 		}
 
-		const unsubscribe = callouts.mirrorContent.mirrorValueFn(() =>
-			mymirror.getValue()
-		);
+		const unsubscribe = callouts.mirrorContent.mirrorValueFn(() => {
+			const rawContent = mymirror.getValue().split("\n");
+			const callouts = mymirror
+				.getAllMarks()
+				.map((c) => c.find()) as CodeMirror.Position[];
+
+			callouts.forEach((callout, i) => {
+				return (rawContent[callout.line] =
+					rawContent[callout.line] + `${Comments.enclosedAlphanumeric[i]}`);
+			});
+
+			return rawContent.join("\n");
+		});
 		return () => {
 			unsubscribe();
 		};

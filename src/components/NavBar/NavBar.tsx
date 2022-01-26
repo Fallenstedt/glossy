@@ -67,7 +67,7 @@ export function NavBar(props: NavBarProps) {
 								exportImage();
 								break;
 							case "Markdown":
-								callouts.mirrorContent.export();
+								callouts.mirrorContent.exportAsMarkdown();
 								break;
 							default:
 								break;
