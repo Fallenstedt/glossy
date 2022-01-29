@@ -36,7 +36,6 @@ export class Comments {
 
 	public addComment(): Comment | null {
 		if (this.comments.length === Comments.max) {
-			console.log("MAX");
 			return null;
 		}
 		const callout = this.createCallout(this.comments.length + 1);

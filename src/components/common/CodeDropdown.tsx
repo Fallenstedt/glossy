@@ -57,7 +57,7 @@ export function CodeDropdown(props: CodeDropDownProps) {
 						leaveTo="transform opacity-0 scale-95"
 					>
 						<Menu.Items
-							className="font-inter-light origin-top absolute left-0 mt-2 w-full sm:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+							className="hover:cursor-pointer font-inter-light origin-top absolute left-0 mt-2 w-full sm:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							style={{
 								maxHeight: "400px",
 								overflowY: "scroll",
@@ -74,6 +74,7 @@ export function CodeDropdown(props: CodeDropDownProps) {
 														props.onChange(e.currentTarget.value);
 													}}
 													className={classNames(
+														"hover:cursor-pointer",
 														active
 															? "bg-gray-100 text-gray-900"
 															: "text-gray-700",

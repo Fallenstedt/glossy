@@ -1,3 +1,7 @@
+.CodeMirror div.CodeMirror-code.comment-mode {
+	cursor: crosshair;
+}
+
 .CodeMirror {
 	height: auto;
 	font-size: 16px;

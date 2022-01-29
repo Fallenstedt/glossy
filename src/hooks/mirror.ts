@@ -211,8 +211,20 @@ export function useGhost(mymirror: CodeMirror.Editor | undefined) {
 						callouts.comments.removeComment(latest);
 						mymirror.refresh();
 					}
+
+					// change cursor
+					const codeBox = document.querySelector(
+						".CodeMirror div.CodeMirror-code"
+					);
+					codeBox?.classList.remove("comment-mode");
 					return;
 				}
+
+				// change cursor
+				const codeBox = document.querySelector(
+					".CodeMirror div.CodeMirror-code"
+				);
+				codeBox?.classList.add("comment-mode");
 
 				const pos = mymirror.coordsChar({
 					left: e.clientX,
