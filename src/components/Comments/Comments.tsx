@@ -81,6 +81,7 @@ export function CommentBox(props: CommentBoxProps) {
 	const commentTextArea = useRef<HTMLTextAreaElement>(null);
 	const { hovering } = useRefHover(commentControls);
 	const callouts = useCallouts();
+
 	const updateComment = useCallback(
 		(content: string) => {
 			props.comment.content = content;
@@ -95,6 +96,14 @@ export function CommentBox(props: CommentBoxProps) {
 				5 + commentTextArea.current.scrollHeight + "px";
 		}
 	}, [commentTextArea]);
+
+	useEffect(() => {
+		window.addEventListener("resize", resizeTextArea);
+		resizeTextArea();
+		return () => {
+			window.removeEventListener("reisze", resizeTextArea);
+		};
+	}, [resizeTextArea]);
 
 	return (
 		<div className="mt-1 px-4 md:px-0 " ref={commentControls}>

@@ -16,6 +16,6 @@ function reducer(previous, current, index, array) {②
 array.reduce(reducer);③
 ```
 
-1. This app provide a means to add annotations to lines of code in a verbatim block.
-2. You can modify the comments in the code above.
-3. Then export this as markdown for your next blog post.
+1. This app helps you explain what some code does.
+2. You can add annotate specific lines of code.
+3. Then export this as markdown or PNG for your next blog post.
