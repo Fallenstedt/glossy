@@ -151,11 +151,11 @@ export function useInitializeComments(mymirror: CodeMirror.Editor | undefined) {
 
 		addCommentOnLine({
 			linenumber: 2,
-			content: "You can add annotate specific lines of code.",
+			content: "You comment on specific lines.",
 		});
 		addCommentOnLine({
 			linenumber: 12,
-			content: "Then export this as markdown or PNG for your next blog post.",
+			content: "Then export this as markdown or a PNG for your next blog post.",
 		});
 	}, [callouts.comments, mymirror]);
 }
