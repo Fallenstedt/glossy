@@ -70,11 +70,15 @@ export function NavBar(props: NavBarProps) {
 						switch (t) {
 							case "PNG":
 								exportImage();
-								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_PNG);
+								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_PNG, {
+									comments: callouts.comments.allComments().length,
+								});
 								break;
 							case "Markdown":
 								callouts.mirrorContent.exportAsMarkdown();
-								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_MARKDOWN);
+								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_MARKDOWN, {
+									comments: callouts.comments.allComments().length,
+								});
 								break;
 							default:
 								break;
