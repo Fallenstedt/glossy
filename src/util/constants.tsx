@@ -1,3 +1,16 @@
+export enum PAGE_ACTION {
+	CHOSE_LANGUAGE = "choseLanguage",
+	CHOSE_THEME = "choseTheme",
+	TOGGLED_COMMENT_ON = "toggledCommentOn",
+	TOGGLED_COMMENT_OFF = "toggledCommentOff",
+	REMOVED_ALL_COMMENTS = "removedAllComments",
+	ADD_COMMENT = "addedComment",
+	REMOVED_COMMENT = "removedComment",
+	EXPORT_PNG = "exportedPNG",
+	EXPORT_MARKDOWN = "exportMarkdown",
+	CLICKED_FEEDBACK = "clickedFeedback",
+}
+
 export const FOCUS_RING_CLASS =
 	"focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 focus:ring-offset-gray-100 focus:ring-indigo-500";
 export const DEFAULT_COLOR = "#9AD4DD";

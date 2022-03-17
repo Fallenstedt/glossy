@@ -1,5 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { CALLOUT_MODE, CODE_MIRROR_DEFAULTS } from "../util/constants";
+import {
+	CALLOUT_MODE,
+	CODE_MIRROR_DEFAULTS,
+	PAGE_ACTION,
+} from "../util/constants";
 import { useCallouts } from "./callouts/callouts";
 import { Comment } from "../hooks/callouts/comment";
 import CodeMirror from "codemirror";
@@ -83,6 +87,10 @@ export function useMirrorTheme(mymirror: CodeMirror.Editor | undefined) {
 			mymirror.setOption("theme", newtheme);
 			setTheme(newtheme);
 			callouts.textColorInverter.setIsLight();
+
+			window.newrelic.addPageAction(PAGE_ACTION.CHOSE_THEME, {
+				theme: newtheme,
+			});
 		},
 		[mymirror, callouts]
 	);
@@ -108,6 +116,10 @@ export function useMirrorMode(
 			}
 
 			setMode(newmode);
+
+			window.newrelic.addPageAction(PAGE_ACTION.CHOSE_LANGUAGE, {
+				language: newmode,
+			});
 		},
 		[mymirror]
 	);
@@ -281,9 +293,11 @@ export function useSetReadOnly(mymirror: CodeMirror.Editor | undefined) {
 			if (currenttab === CALLOUT_MODE.PASTE_YOUR_CODE) {
 				mymirror?.setOption("readOnly", false);
 				mymirror?.setOption("cursorBlinkRate", 530);
+				window.newrelic.addPageAction(PAGE_ACTION.TOGGLED_COMMENT_OFF);
 			} else {
 				mymirror?.setOption("readOnly", true);
 				mymirror?.setOption("cursorBlinkRate", -1);
+				window.newrelic.addPageAction(PAGE_ACTION.TOGGLED_COMMENT_ON);
 			}
 		};
 		const unsubscribe = callouts.onTabUpdate(toggleReadOnly);
@@ -315,6 +329,7 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			const linecount = mymirror.getDoc().lineCount();
 			if (linecount === 1 && mymirror.getLine(0) === "") {
 				callouts.comments.removeAllComments();
+				window.newrelic.addPageAction(PAGE_ACTION.REMOVED_ALL_COMMENTS);
 			}
 			// refresh comments
 			callouts.comments.refreshComments();
@@ -331,8 +346,8 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 					return;
 				}
 				latestComment.ghost = false;
-
 				movedByMouse = false;
+				window.newrelic.addPageAction(PAGE_ACTION.ADD_COMMENT);
 			}
 		};
 		mymirror.on("mousedown", mousedown);

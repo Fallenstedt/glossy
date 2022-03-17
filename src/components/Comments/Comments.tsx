@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
 import { Comment } from "../../hooks/callouts/comment";
 import { SmallText } from "../common/Font";
-import { CALLOUT_MODE } from "../../util/constants";
+import { CALLOUT_MODE, PAGE_ACTION } from "../../util/constants";
 import { useRefHover } from "../../hooks/hover";
 import { Transition } from "@headlessui/react";
 import { TinyButton } from "../common/TInyButton";
@@ -121,6 +121,7 @@ export function CommentBox(props: CommentBoxProps) {
 						className="bg-gray-200"
 						onClick={() => {
 							callouts.comments.removeComment(props.comment);
+							window.newrelic.addPageAction(PAGE_ACTION.REMOVED_COMMENT);
 						}}
 					>
 						&#10005; Remove

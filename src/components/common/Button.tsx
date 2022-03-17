@@ -25,10 +25,12 @@ export function Button(props: ButtonProps) {
 interface LinkProps {
 	link: string;
 	children: React.ReactNode;
+	onClick?: () => void;
 }
 export function Link(props: LinkProps) {
 	return (
 		<a
+			onClick={() => props.onClick && props.onClick()}
 			className="rounded-md px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 active:bg-slate-200 transition-colors disabled:bg-slate-100"
 			target={"_blank"}
 			href={props.link}

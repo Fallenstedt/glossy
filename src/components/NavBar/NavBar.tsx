@@ -3,15 +3,15 @@ import download from "downloadjs";
 import { toPng } from "html-to-image";
 import { useCallback, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
+import { PAGE_ACTION } from "../../util/constants";
 import { Link } from "../common/Button";
 import { DropDown } from "../common/DropDown";
 
 interface NavBarProps {}
 
 export function NavBar(props: NavBarProps) {
-	const [loading, setLoading] = useState(false);
+	const [, setLoading] = useState(false);
 	const callouts = useCallouts();
-	console.log(loading);
 
 	const exportImage = useCallback(() => {
 		const region = document.getElementById("export-region");
@@ -51,7 +51,12 @@ export function NavBar(props: NavBarProps) {
 				/>
 			</div>
 			<div className="flex flex-row gap-x-1">
-				<Link link="https://docs.google.com/forms/d/e/1FAIpQLSe5Z4xZ3-1JSQDPK4Mhp0IObPJniERuVqug-jFXf95K91wXJQ/viewform?usp=pp_url">
+				<Link
+					onClick={() => {
+						window.newrelic.addPageAction(PAGE_ACTION.CLICKED_FEEDBACK);
+					}}
+					link="https://docs.google.com/forms/d/e/1FAIpQLSe5Z4xZ3-1JSQDPK4Mhp0IObPJniERuVqug-jFXf95K91wXJQ/viewform?usp=pp_url"
+				>
 					<div className="flex justify-center items-center">
 						Feedback
 						<ExternalLinkIcon className="h-4 ml-2" />
@@ -65,9 +70,11 @@ export function NavBar(props: NavBarProps) {
 						switch (t) {
 							case "PNG":
 								exportImage();
+								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_PNG);
 								break;
 							case "Markdown":
 								callouts.mirrorContent.exportAsMarkdown();
+								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_MARKDOWN);
 								break;
 							default:
 								break;
