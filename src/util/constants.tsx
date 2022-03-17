@@ -7,7 +7,7 @@ export enum PAGE_ACTION {
 	ADD_COMMENT = "addedComment",
 	REMOVED_COMMENT = "removedComment",
 	EXPORT_PNG = "exportedPNG",
-	EXPORT_MARKDOWN = "exportMarkdown",
+	EXPORT_MARKDOWN = "exportedMarkdown",
 	CLICKED_FEEDBACK = "clickedFeedback",
 }
 
