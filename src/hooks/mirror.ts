@@ -21,7 +21,7 @@ export function useMirror() {
 }
 
 export function useInitializeTitleListener(
-	title: React.RefObject<HTMLElement>
+	title: React.RefObject<HTMLInputElement>
 ) {
 	const callouts = useCallouts();
 
@@ -31,7 +31,7 @@ export function useInitializeTitleListener(
 		}
 
 		const unsubscribe = callouts.mirrorContent.titleFn(
-			() => title.current?.textContent ?? ""
+			() => title.current?.value ?? ""
 		);
 		return () => {
 			unsubscribe();

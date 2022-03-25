@@ -1,10 +1,10 @@
-export enum NotifcationType {
-	SUCCESS,
-}
 interface NotificationProps {
-	type: NotifcationType;
-	message: string;
+	children: string;
 }
 export function Notification(props: NotificationProps) {
-	return <div>{props.message}</div>;
+	return (
+		<div className="rounded-md text-md font-inter-light text-gray-700 p-4 my-1 bg-green-50">
+			{props.children}
+		</div>
+	);
 }

@@ -3,6 +3,7 @@ import download from "downloadjs";
 import { toPng } from "html-to-image";
 import { useCallback, useState } from "react";
 import { useCallouts } from "../../hooks/callouts/callouts";
+import { useNotifications } from "../../hooks/notification_manager";
 import { PAGE_ACTION } from "../../util/constants";
 import { Link } from "../common/Button";
 import { DropDown } from "../common/DropDown";
@@ -12,6 +13,7 @@ interface NavBarProps {}
 export function NavBar(props: NavBarProps) {
 	const [, setLoading] = useState(false);
 	const callouts = useCallouts();
+	const notifications = useNotifications();
 
 	const exportImage = useCallback(() => {
 		const region = document.getElementById("export-region");
@@ -79,6 +81,7 @@ export function NavBar(props: NavBarProps) {
 								window.newrelic.addPageAction(PAGE_ACTION.EXPORT_MARKDOWN, {
 									comments: callouts.comments.allComments().length,
 								});
+								notifications.success("Markdown copied to clipboard");
 								break;
 							default:
 								break;
