@@ -317,6 +317,21 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 		let movedByMouse = false;
 		const mousedown = () => {
 			movedByMouse = true;
+
+			if (callouts.modes.tab !== CALLOUT_MODE.ANNOTATE) {
+				return;
+			}
+			// Click event
+			if (movedByMouse) {
+				const comments = callouts.comments.allComments();
+				const latestComment = comments[comments.length - 1];
+				if (!latestComment) {
+					return;
+				}
+				latestComment.ghost = false;
+				movedByMouse = false;
+				window.newrelic.addPageAction(PAGE_ACTION.ADD_COMMENT);
+			}
 		};
 		const keydown = () => {
 			movedByMouse = false;
@@ -334,34 +349,18 @@ export function useAddComment(mymirror: CodeMirror.Editor | undefined) {
 			// refresh comments
 			callouts.comments.refreshComments();
 		};
-		const cursorActivity = (e: CodeMirror.Editor) => {
-			if (callouts.modes.tab !== CALLOUT_MODE.ANNOTATE) {
-				return;
-			}
-			// Click event
-			if (movedByMouse) {
-				const comments = callouts.comments.allComments();
-				const latestComment = comments[comments.length - 1];
-				if (!latestComment) {
-					return;
-				}
-				latestComment.ghost = false;
-				movedByMouse = false;
-				window.newrelic.addPageAction(PAGE_ACTION.ADD_COMMENT);
-			}
-		};
+
 		mymirror.on("mousedown", mousedown);
 		mymirror.on("keydown", keydown);
 		mymirror.on("beforeChange", beforechange);
 		mymirror.on("keyup", keyup);
-		mymirror.on("cursorActivity", cursorActivity);
 
 		return () => {
 			mymirror.off("mousedown", mousedown);
 			mymirror.off("keydown", keydown);
 			mymirror.off("beforeChange", beforechange);
 			mymirror.off("keyup", keyup);
-			mymirror.off("cursorActivity", cursorActivity);
+			// mymirror.off("cursorActivity", cursorActivity);
 		};
 	}, [mymirror, callouts]);
 }
