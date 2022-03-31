@@ -158,16 +158,16 @@ export function useInitializeComments(mymirror: CodeMirror.Editor | undefined) {
 
 		addCommentOnLine({
 			linenumber: 0,
-			content: "This app helps you explain what some code does.",
+			content: "Paste your code",
 		});
 
 		addCommentOnLine({
 			linenumber: 2,
-			content: "You comment on specific lines.",
+			content: "Create annnotations using the comment button",
 		});
 		addCommentOnLine({
 			linenumber: 12,
-			content: "Then export this as markdown or a PNG for your next blog post.",
+			content: "Export as an image or as markdown",
 		});
 	}, [callouts.comments, mymirror]);
 }
